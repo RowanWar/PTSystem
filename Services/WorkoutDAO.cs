@@ -5,7 +5,7 @@ namespace PTManagementSystem.Services
 {
     public class WorkoutDAO : IWorkoutDataService
     {
-        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter300;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
 
         public List<WorkoutModel> GetAllWorkouts()
         {
@@ -34,7 +34,6 @@ namespace PTManagementSystem.Services
                         {
                             cmd.Parameters.AddWithValue("@UserId", UserId);
                             var result = cmd.ExecuteReader();
-                            //int val;
 
                             System.Diagnostics.Debug.WriteLine($"Query result: {result}");
 
@@ -79,6 +78,97 @@ namespace PTManagementSystem.Services
                 }
             }
         }
+
+
+
+        public List<WorkoutExercisesModel> GetWorkoutDetailsByWorkoutId(int WorkoutId)
+        {
+            {
+                List<WorkoutExercisesModel> workoutDetails = new List<WorkoutExercisesModel>();
+
+
+                string sqlStatement = @"SELECT 
+                                        e.exercise_name,
+                                        e.muscle_group,
+                                        e.description,
+                                        s.set_id,
+                                        s.reps,
+                                        s.weight,
+                                        s.starttime,
+                                        s.endtime,
+                                        sc.set_category_type
+                                    FROM 
+                                        exercise e
+                                    JOIN 
+                                        workout_exercise we ON e.exercise_id = we.exercise_id
+                                    JOIN 
+                                        set s ON we.workout_exercise_id = s.workout_exercise_id
+                                    JOIN 
+                                        set_category sc ON s.set_category_id = sc.set_category_id
+                                    WHERE 
+                                        we.workout_id = @WorkoutId
+                                    ORDER BY e.exercise_name;";
+
+
+                using (var connection = new NpgsqlConnection(dbConnectionString))
+                {
+                    try
+                    {
+                        // Open the connection
+                        connection.Open();
+
+
+                        // Create a command object
+                        using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@WorkoutId", WorkoutId);
+                            var result = cmd.ExecuteReader();
+
+                            System.Diagnostics.Debug.WriteLine($"Query result: {result}");
+
+                            if (result.HasRows)
+                            {
+
+                                while (result.Read())
+                                {
+                                    //val = (int)result.GetValue(0);
+                                    workoutDetails.Add(new WorkoutExercisesModel
+                                    {
+                                        ExerciseName = (string)result["exercise_name"],
+                                        MuscleGroup = (string)result["muscle_group"],
+                                        ExerciseDescription = (string)result["description"],
+                                        SetReps = (int)result["reps"],
+                                        SetCategory = (string)result["set_category_type"]
+
+                                    });
+
+                                    //result.GetString(1));
+
+                                }
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("No rows found.");
+
+                            }
+
+                            result.Close();
+                            //return foundClients;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle any errors that might have occurred
+                        System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+
+                    }
+
+                    return workoutDetails;
+                }
+            }
+        }
+
+
 
         public WorkoutModel GetWorkoutById(int id)
         {

@@ -5,7 +5,7 @@ namespace PTManagementSystem.Services
 {
     public class ClientDAO : IClientDataService
     {
-        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter300;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
 
         public int Delete(ClientModel client)
         {

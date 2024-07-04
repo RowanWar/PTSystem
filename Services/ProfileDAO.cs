@@ -5,7 +5,7 @@ namespace PTManagementSystem.Services
 {
     public class ProfileDAO : IProfileDataService
     {
-        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter300;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
 
         public List<CoachModel> GetCoachProfileById(int CoachId)
         {

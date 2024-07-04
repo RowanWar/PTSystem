@@ -13,7 +13,7 @@ namespace ptmanagementsystem.services
         public static bool FindUserByNameAndPassword(UserLogin user)
         {
             bool success = false;
-            string connectionString = "Host=localhost;Username=postgres;Password=BeBetter300;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+            string connectionString = "Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
 
             using (var conn = new NpgsqlConnection(connectionString))
             {

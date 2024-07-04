@@ -15,5 +15,6 @@ namespace PTManagementSystem.Data
         public DbSet<PTManagementSystem.Models.WorkoutModel> WorkoutModel { get; set; } = default!;
         public DbSet<PTManagementSystem.Models.ClientWeeklyReportModel> ClientWeeklyReportModel { get; set; } = default!;
         public DbSet<PTManagementSystem.Models.CoachModel> CoachModel { get; set; } = default!;
+        public DbSet<PTManagementSystem.Models.WorkoutExercisesModel> WorkoutExercisesModel { get; set; } = default!;
     }
 }

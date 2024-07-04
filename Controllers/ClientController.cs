@@ -25,6 +25,15 @@ namespace PTManagementSystem.Controllers
             return View("ClientWorkout", workoutList);
         }
 
+        // Displays the workout details of a user based upon the WorkoutId provided
+        public IActionResult WorkoutDetails(int WorkoutId)
+        {
+            WorkoutDAO workout = new WorkoutDAO();
+            List<WorkoutExercisesModel> workoutDetails = workout.GetWorkoutDetailsByWorkoutId(WorkoutId);
+
+            return View("~/Views/Workout/WorkoutDetails.cshtml", workoutDetails);
+        }
+
 
         public IActionResult WeeklyReport(int ClientUserId)
         {
