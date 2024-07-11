@@ -1,4 +1,12 @@
-﻿@model IEnumerable<PTManagementSystem.Models.WorkoutExercisesModel>
+﻿@* @model PTManagementSystem.Models.WorkoutExercisesModel *@
+@model IEnumerable<PTManagementSystem.Models.WorkoutExercisesModel>
+<link rel="stylesheet" href="~/css/workoutDetails.css" />
+
+
+
+@* <input type="hidden" id="hiddenModelData" data-value="@myData" /> *@
+@* <input type="hidden" id="hiddenModelData" value="@Html.Raw(itemsJson)" /> *@
+@* <input type="hidden" id="message" value="@ViewBag.ModelData" /> *@
 
 <p>
     Details of workout Page
@@ -20,6 +28,9 @@
             </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.ExerciseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExerciseGroupId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MuscleGroup)
@@ -44,7 +55,8 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            @* let WorkoutData = ; *@
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
@@ -57,8 +69,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.WorkoutCreatedAt)
             </td> *@
+
             <td>
                 @Html.DisplayFor(modelItem => item.ExerciseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExerciseGroupId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MuscleGroup)
@@ -87,3 +103,6 @@
 }
     </tbody>
 </table>
+
+
+<script src="~/js/workoutDetails.js"></script>

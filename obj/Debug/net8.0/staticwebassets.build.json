@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gJ0r4E5rSNubJkBq0ch6iRo2zg8hdWcQfXOnCrRHmB8=",
+  "Hash": "5bBUfjcGiYaOgYdIKAbUBwmHX/gOIlChudBgDXZ/SRk=",
   "Source": "PTManagementSystem",
   "BasePath": "_content/PTManagementSystem",
   "Mode": "Default",
@@ -1231,6 +1231,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\css\\workoutDetails.css",
+      "SourceId": "PTManagementSystem",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\",
+      "BasePath": "_content/PTManagementSystem",
+      "RelativePath": "css/workoutDetails.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\workoutDetails.css"
     },
     {
       "Identity": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\favicon.ico",

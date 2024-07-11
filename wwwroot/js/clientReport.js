@@ -47,14 +47,3 @@ span.onclick = function () {
         createdImage.removeChild(createdImage.firstChild);
     }
 }
-// document.getElementById('getResultButton').addEventListener('click', function () {
-//     fetch('/Client/ViewImage')
-//         .then(response => response.json())
-//         .then(data => {
-//             modal.style.display = "block";
-//             // alert('Result from DB: ');
-//         })
-//         .catch(error => {
-//             console.error('Error fetching data:', error);
-//         });
-// });

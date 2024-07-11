@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\css\\workoutDetails.css",
+      "PackagePath": "staticwebassets\\css\\workoutDetails.css"
+    },
+    {
       "Id": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },

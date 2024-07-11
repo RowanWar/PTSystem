@@ -9,6 +9,8 @@ namespace PTManagementSystem.Models
 
         public int UserId { get; set; }
 
+        public int ExerciseGroupId { get; set; }
+
         public DateTime WorkoutDate { get; set; }
 
         public TimeSpan WorkoutDuration { get; set; }
@@ -25,7 +27,7 @@ namespace PTManagementSystem.Models
 
         public int SetReps { get; set; }
 
-        public int SetWeight { get; set; }
+        public decimal SetWeight { get; set; }
 
         public string SetCategory { get; set; }
     }

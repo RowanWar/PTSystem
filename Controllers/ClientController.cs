@@ -31,6 +31,8 @@ namespace PTManagementSystem.Controllers
             WorkoutDAO workout = new WorkoutDAO();
             List<WorkoutExercisesModel> workoutDetails = workout.GetWorkoutDetailsByWorkoutId(WorkoutId);
 
+            //ViewBag.ModelData = workoutDetails;
+
             return View("~/Views/Workout/WorkoutDetails.cshtml", workoutDetails);
         }
 

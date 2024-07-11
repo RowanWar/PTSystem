@@ -96,7 +96,8 @@ namespace PTManagementSystem.Services
                                         s.weight,
                                         s.starttime,
                                         s.endtime,
-                                        sc.set_category_type
+                                        sc.set_category_type,
+                                        we.workout_exercise_id
                                     FROM 
                                         exercise e
                                     JOIN 
@@ -138,8 +139,10 @@ namespace PTManagementSystem.Services
                                         MuscleGroup = (string)result["muscle_group"],
                                         ExerciseDescription = (string)result["description"],
                                         SetReps = (int)result["reps"],
-                                        SetCategory = (string)result["set_category_type"]
-
+                                        SetCategory = (string)result["set_category_type"],
+                                        ExerciseGroupId = (int)result["workout_exercise_Id"],
+                                        SetWeight = (decimal)result["weight"],
+                                        SetId = (int)result["set_id"]
                                     });
 
                                     //result.GetString(1));
