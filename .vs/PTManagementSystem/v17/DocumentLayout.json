@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\views\\workout\\workoutdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:views\\workout\\workoutdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\wwwroot\\css\\workoutdetails.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:wwwroot\\css\\workoutdetails.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\wwwroot\\css\\profileindex.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:wwwroot\\css\\profileindex.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\wwwroot\\css\\workoutdetails.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:wwwroot\\css\\workoutdetails.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\views\\workout\\workoutdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:views\\workout\\workoutdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\views\\client\\clientworkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:views\\client\\clientworkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\wwwroot\\js\\workoutdetails.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -29,14 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\models\\workoutexercisesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:models\\workoutexercisesmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\views\\client\\clientworkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|solutionrelative:views\\client\\clientworkout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6805B0F6-DADF-438A-8DF1-804C21AF9EF9}|PTManagementSystem.csproj|c:\\users\\rowan\\documents\\codingprojects\\project\\ptmanagementsystem\\services\\clientdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -94,15 +90,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 7,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "ClientDAO.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\ClientDAO.cs",
               "RelativeDocumentMoniker": "Services\\ClientDAO.cs",
@@ -111,12 +103,11 @@
               "ViewState": "AQIAADYAAAAAAAAAAAAowA4AAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-29T14:43:17.153Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "ProfileDAO.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\ProfileDAO.cs",
               "RelativeDocumentMoniker": "Services\\ProfileDAO.cs",
@@ -125,12 +116,11 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAABZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-17T00:37:40.806Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "WorkoutDAO.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\WorkoutDAO.cs",
               "RelativeDocumentMoniker": "Services\\WorkoutDAO.cs",
@@ -139,12 +129,11 @@
               "ViewState": "AQIAAHcAAAAAAAAAAAApwI8AAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-17T01:42:36.338Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "WorkoutExercisesModel.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Models\\WorkoutExercisesModel.cs",
               "RelativeDocumentMoniker": "Models\\WorkoutExercisesModel.cs",
@@ -153,21 +142,19 @@
               "ViewState": "AQIAAAYAAAAAAAAAAAAIwB0AAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-03T18:04:43.579Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "workoutDetails.css",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\css\\workoutDetails.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\workoutDetails.css",
               "ToolTip": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\css\\workoutDetails.css",
               "RelativeToolTip": "wwwroot\\css\\workoutDetails.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAVAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-07-11T02:41:33.994Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-11T02:41:33.994Z"
             },
             {
               "$type": "Document",
@@ -179,12 +166,11 @@
               "RelativeToolTip": "wwwroot\\css\\profileIndex.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-07-11T02:41:18.148Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-11T02:41:18.148Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 4,
               "Title": "ClientWorkout.cshtml",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Client\\ClientWorkout.cshtml",
               "RelativeDocumentMoniker": "Views\\Client\\ClientWorkout.cshtml",
@@ -192,25 +178,24 @@
               "RelativeToolTip": "Views\\Client\\ClientWorkout.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAADEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-03T17:59:07.937Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-03T17:59:07.937Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
               "Title": "ClientController.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Controllers\\ClientController.cs",
               "RelativeDocumentMoniker": "Controllers\\ClientController.cs",
               "ToolTip": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Controllers\\ClientController.cs",
               "RelativeToolTip": "Controllers\\ClientController.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAAgwCMAAABRAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAQwCMAAABRAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-29T14:47:56.757Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "WorkoutDetails.cshtml",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Workout\\WorkoutDetails.cshtml",
               "RelativeDocumentMoniker": "Views\\Workout\\WorkoutDetails.cshtml",
@@ -218,25 +203,11 @@
               "RelativeToolTip": "Views\\Workout\\WorkoutDetails.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-04T01:51:15.107Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-04T01:51:15.107Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Profile\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Profile\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Profile\\Index.cshtml",
-              "RelativeToolTip": "Views\\Profile\\Index.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-17T00:34:19.222Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "workoutDetails.js",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\wwwroot\\js\\workoutDetails.js",
               "RelativeDocumentMoniker": "wwwroot\\js\\workoutDetails.js",
@@ -244,12 +215,11 @@
               "RelativeToolTip": "wwwroot\\js\\workoutDetails.js",
               "ViewState": "AQIAABIAAAAAAAAAAAAowCwAAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-07-06T23:44:50.584Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-06T23:44:50.584Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Client\\Details.cshtml",
               "RelativeDocumentMoniker": "Views\\Client\\Details.cshtml",
@@ -257,12 +227,11 @@
               "RelativeToolTip": "Views\\Client\\Details.cshtml",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-04T02:35:49.278Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-04T02:35:49.278Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Views\\Client\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Client\\Index.cshtml",
@@ -270,12 +239,11 @@
               "RelativeToolTip": "Views\\Client\\Index.cshtml",
               "ViewState": "AQIAAB4AAAAAAAAAAAAAADsAAABNAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-03T17:59:54.323Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-03T17:59:54.323Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 12,
               "Title": "SecurityDAO.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\SecurityDAO.cs",
               "RelativeDocumentMoniker": "Services\\SecurityDAO.cs",
@@ -287,7 +255,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 13,
               "Title": "WorkoutModel.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Models\\WorkoutModel.cs",
               "RelativeDocumentMoniker": "Models\\WorkoutModel.cs",
@@ -299,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "ImageDAO.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\ImageDAO.cs",
               "RelativeDocumentMoniker": "Services\\ImageDAO.cs",
@@ -311,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "CoachModel.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Models\\CoachModel.cs",
               "RelativeDocumentMoniker": "Models\\CoachModel.cs",
@@ -323,7 +291,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "IProfileDataService.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\IProfileDataService.cs",
               "RelativeDocumentMoniker": "Services\\IProfileDataService.cs",
@@ -335,7 +303,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 19,
               "Title": "IClientDataService.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Services\\IClientDataService.cs",
               "RelativeDocumentMoniker": "Services\\IClientDataService.cs",
@@ -347,7 +315,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 14,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
@@ -359,7 +327,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 15,
               "Title": "ProfileController.cs",
               "DocumentMoniker": "C:\\Users\\Rowan\\Documents\\CodingProjects\\Project\\PTManagementSystem\\Controllers\\ProfileController.cs",
               "RelativeDocumentMoniker": "Controllers\\ProfileController.cs",
