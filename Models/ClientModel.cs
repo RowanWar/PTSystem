@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PTManagementSystem.Models;
+﻿using PTManagementSystem.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

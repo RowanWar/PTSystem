@@ -1,6 +1,5 @@
 ﻿using PTManagementSystem.Models;
 using Npgsql;
-using Microsoft.Data.SqlClient;
 using System.Data;
 namespace PTManagementSystem.Helpers;
 
