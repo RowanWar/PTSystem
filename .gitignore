@@ -1,4 +1,4 @@
-.vs/
-bin/Debug/net8.0/
-obj/
-obj/Debug/net8.0/
+/.vs/
+bin/Debug/net8.0
+/obj/
+/obj/Debug/net8.0/
