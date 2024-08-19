@@ -310,5 +310,74 @@ namespace PTManagementSystem.Services
                 }
             
         }
+
+
+
+
+        public List<ExerciseModel> GetAllExercisesByUserId()
+        {
+            List<ExerciseModel> foundExercises = new List<ExerciseModel>();
+
+       
+            string sqlStatement = "SELECT * FROM exercise LIMIT 150";
+
+
+            using (var connection = new NpgsqlConnection(dbConnectionString))
+            {
+                try
+                {
+                    // Open the connection
+                    connection.Open();
+
+
+                    // Create a command object
+                    using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                    {
+                        //cmd.Parameters.AddWithValue("@UserId", UserId);
+                        var result = cmd.ExecuteReader();
+                        //int val;
+
+                        System.Diagnostics.Debug.WriteLine($"Query result: {result}");
+
+                        if (result.HasRows)
+                        {
+                            while (result.Read())
+                            {
+                                //val = (int)result.GetValue(0);
+                                foundExercises.Add(new ExerciseModel
+                                {
+                                    ExerciseId = (int)result["exercise_id"],
+                                    ExerciseName = (string)result["exercise_name"],
+                                    MuscleGroup = (string)result["muscle_group"],
+                                    Description = (string)result["description"],
+                                    IsDefault = (bool)result["is_default"],
+                                    // Checks if user_id contains a null value, if so assigns null value to the result instead.
+                                    UserId = result["user_id"] is DBNull ? (int?)null : (int)result["user_id"]
+                                });
+
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("No rows found.");
+
+                        }
+
+                        result.Close();
+                        //return foundClients;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any errors that might have occurred
+                    System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+
+                }
+
+                System.Diagnostics.Debug.WriteLine("Returning fetch request now...");
+                return foundExercises;
+            }
+
+        }
     }
 }

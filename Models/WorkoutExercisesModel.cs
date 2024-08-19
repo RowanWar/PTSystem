@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace PTManagementSystem.Models
 {
@@ -17,9 +20,14 @@ namespace PTManagementSystem.Models
 
         public DateTime WorkoutCreatedAt { get; set; }
 
+        public string WorkoutName { get; set; }
+
         public string ExerciseName { get; set; }
 
         public string MuscleGroup { get; set; }
+
+        /*stores a list of muscle groups for a dropdown list in the view. List options stored directly in the controller*/
+        //public IEnumerable<SelectListItem> MuscleGroupList { get; set; } 
 
         public string ExerciseDescription { get; set; }
 
@@ -30,5 +38,7 @@ namespace PTManagementSystem.Models
         public decimal SetWeight { get; set; }
 
         public string SetCategory { get; set; }
+
+        //public IEnumerable<SelectListItem> SetCategoryList { get; set; }
     }
 }
