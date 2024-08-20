@@ -62,12 +62,12 @@ function stopWatch() {
 };
 
 //registerNewWorkout();
-function registerNewWorkout() {
-    localStorage.setItem("workout", "Chest");
-};
+//function registerNewWorkout() {
+//    localStorage.setItem("workout", "Chest");
+//};
 
-const activeWorkout = localStorage.getItem("workout");
-console.log(activeWorkout);
+//const activeWorkout = localStorage.getItem("workout");
+//console.log(activeWorkout);
 
 
 
@@ -78,40 +78,79 @@ let modal = document.getElementById("myModal");
 let btn = document.querySelector("#addExerciseBtn");
 let span = document.querySelector(".close");
 
-console.log('Before');
+
+let selectedTd = [];
+function activeRows(tableData) {
+    const tdId = tableData.getAttribute("data-exercise-id");
+    //const tdId = td.id;
+    const tdIndex = selectedTd.indexOf(tdId);
+
+    if (tdIndex === -1) {
+        selectedTd.push(tdId);
+    }
+    else {
+        selectedTd.splice(tdIndex, 1);
+    }
+    console.log('Clicked rows: ', selectedTd);
+};
+
 function addExerciseBtnClicked() {
-    console.log('Fired');
 
     fetch('/Workout/ViewExerciseList')
         .then(response => response.json())
         .then(data => {
-            console.log('Modal activated');
-
             // Causes the modal to pop-up upon SQL query returning succesfully
             modal.style.display = "block";
 
             // Tells JS to expect and parse as a Json obj.
             var jsonArr = JSON.parse(data);
 
+            let modalContent = document.querySelector(".dynamic-content");
 
-            // Iterates through each returned image to unpack its unique ID and display it in the modal.
+            let generateTable = document.createElement("table");
+            generateTable.setAttribute("id", "DynamicExerciseTable");
+            modalContent.appendChild(generateTable);
+
+            // Iterates through each exercise and displays it within its own table row attribute
             for (let i = 0; i < jsonArr.length; i++) {
-                console.log(i);
-                //console.log(jsonArr[i]["ImageFilePath"]);
+                //console.log(jsonArr[i]);
 
-                //let fileId = jsonArr[i]["ImageFilePath"];
+                let exerciseName = jsonArr[i]["ExerciseName"];
+                let exerciseId = jsonArr[i]["ExerciseId"]
+                let newRow = generateTable.insertRow();
+                let newCell = newRow.insertCell();
+                newCell.setAttribute("data-exercise-id", exerciseId);
 
-                //let generateImage = document.createElement("img");
-                //// first slash in "/images/" dictates its an absolute path and not relative
-                //generateImage.src = "/images/" + fileId;
+                let addContent = document.createTextNode(exerciseName);
+                newCell.appendChild(addContent);
 
-                //document.querySelector('.images-div').appendChild(generateImage);
+                // This cannot be a lambda func as "this" context does not work.
+                newCell.addEventListener("click", function () {
+                    newCell.classList.toggle("highlightCell")
+                    
+                    console.log(this.getAttribute("data-exercise-id"));
+                    activeRows(this);
+                    //this.style.background = "aqua";
+
+                });
             }
 
         })
         .catch(error => {
             console.error('Error fetching data: ', error);
         });
+
+
 };
 
-addExerciseBtnClicked();
+// The close button for the modal 
+span.onclick = function () {
+    modal.style.display = "none";
+
+    // Grabs the parent node inside of the modal-content
+    let createdImage = document.querySelector('.images-div');
+
+    while (createdImage.firstChild) {
+        createdImage.removeChild(createdImage.firstChild);
+    }
+}

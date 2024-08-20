@@ -71,7 +71,7 @@ namespace PTManagementSystem.Controllers
             string resultSerialized = JsonSerializer.Serialize(exerciseList);
 
             System.Diagnostics.Debug.WriteLine(result);
-            return Json(result.ToString());
+            return Json(resultSerialized);
             //return View("CreateWorkout", exerciseList);
         }
 
