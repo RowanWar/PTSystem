@@ -16,9 +16,13 @@ namespace PTManagementSystem.Models
 
         public DateTime WorkoutDate { get; set; }
 
-        public TimeSpan WorkoutDuration { get; set; }
+        public TimeSpan Duration { get; set; }
 
-        public DateTime WorkoutCreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public string Notes { get; set; }
+
+        public Boolean WorkoutActive{ get; set; }
 
         public string WorkoutName { get; set; }
 

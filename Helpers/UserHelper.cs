@@ -2,6 +2,7 @@
 using Npgsql;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Linq;
 namespace PTManagementSystem.Helpers;
 
 public class UserHelper
@@ -42,6 +43,11 @@ public class UserHelper
                     {
                         System.Diagnostics.Debug.WriteLine("No rows found.");
                     }
+
+                    DataTable dt = new();
+
+                    //dt.Select((x) => x.Id).Where((y) => y.firstname = "")
+
                     result.Close();
                 }
             }

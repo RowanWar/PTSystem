@@ -56,8 +56,10 @@ namespace PTManagementSystem.Controllers
         }
 
 
-        public IActionResult AddExercise()
+        public IActionResult SubmitExercises(int UserId)
         {
+            WorkoutDAO workout = new WorkoutDAO();
+            List<ExerciseModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
             return View();
         }
 

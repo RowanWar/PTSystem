@@ -17,7 +17,6 @@ namespace PTManagementSystem.Services
             {
                 List<WorkoutModel> foundWorkouts = new List<WorkoutModel>();
 
-                bool foundWorkout = false;
                 string sqlStatement = "SELECT * FROM workout WHERE user_id = @UserId";
 
 
@@ -311,6 +310,70 @@ namespace PTManagementSystem.Services
             
         }
 
+
+
+        public List<WorkoutExercisesModel> GetUsersActiveWorkout(int UserId)
+        {
+            List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
+
+            // Only returns a workout if workout_active == true
+            string sqlStatement = "SELECT * FROM workout WHERE workout_active is true and user_id = @UserId";
+
+
+            using (var connection = new NpgsqlConnection(dbConnectionString))
+            {
+                try
+                {
+                    // Open the connection
+                    connection.Open();
+
+
+                    // Create a command object
+                    using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        var result = cmd.ExecuteReader();
+                        //int val;
+
+                        System.Diagnostics.Debug.WriteLine($"Query result: {result}");
+
+                        if (result.HasRows)
+                        {
+                            while (result.Read())
+                            {
+                                //val = (int)result.GetValue(0);
+                                foundWorkout.Add(new WorkoutExercisesModel
+                                {
+                                    WorkoutId = (int)result["workout_id"],
+                                    UserId = (int)result["user_id"],
+                                    WorkoutDate = (DateTime)result["workout_date"],
+                                    Duration = (TimeSpan)result["duration"],
+                                    Notes = (string)result["notes"],
+                                    CreatedAt= (DateTime)result["created_at"],
+                                    WorkoutActive = (Boolean)result["workout_active"]
+                                });
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("No rows found.");
+
+                        }
+
+                        result.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any errors that might have occurred
+                    System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+
+                }
+
+                return foundWorkout;
+            }
+
+        }
 
 
 

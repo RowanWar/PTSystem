@@ -79,6 +79,19 @@ let btn = document.querySelector("#addExerciseBtn");
 let span = document.querySelector(".close");
 
 
+//1. Generate a workout in "workout" table with flag is_active = true.
+//2. Populate "workout_exercise" with the exercises added based on workout_id.
+//3. Figure out how to join sets/reps into the query to view those too.
+//4. Probably add a new column "workoutCreatedAt" in "workout" to figure out how long elapsed the workout has been on page reload for the timer.
+function submitExercises() {
+    console.log('Onclick worked');
+
+
+}
+
+
+
+// Stores a list of exercise IDs that the user has clicked on to be added to their workout
 let selectedTd = [];
 function activeRows(tableData) {
     const tdId = tableData.getAttribute("data-exercise-id");
@@ -87,9 +100,11 @@ function activeRows(tableData) {
 
     if (tdIndex === -1) {
         selectedTd.push(tdId);
+        tableData.style.background = "aqua";
     }
     else {
         selectedTd.splice(tdIndex, 1);
+        tableData.style.background = "white";
     }
     console.log('Clicked rows: ', selectedTd);
 };
@@ -117,7 +132,9 @@ function addExerciseBtnClicked() {
 
                 let exerciseName = jsonArr[i]["ExerciseName"];
                 let exerciseId = jsonArr[i]["ExerciseId"]
+
                 let newRow = generateTable.insertRow();
+
                 let newCell = newRow.insertCell();
                 newCell.setAttribute("data-exercise-id", exerciseId);
 
@@ -135,6 +152,15 @@ function addExerciseBtnClicked() {
                 });
             }
 
+            let submitExerciseBtn = document.createElement("button");
+            submitExerciseBtn.setAttribute("id", "submitExerciseBtn");
+            // Populates text inside the button
+            submitExerciseBtn.appendChild(document.createTextNode("Submit exercises"));
+            submitExerciseBtn.onclick = submitExercises;
+            //submitExerciseBtn.addEventListener("click", submitExercises);
+            modalContent.after(submitExerciseBtn);
+
+
         })
         .catch(error => {
             console.error('Error fetching data: ', error);
@@ -148,9 +174,12 @@ span.onclick = function () {
     modal.style.display = "none";
 
     // Grabs the parent node inside of the modal-content
-    let createdImage = document.querySelector('.images-div');
+    let modalContent = document.querySelector(".dynamic-content");
+    let submitExerciseBtn = document.querySelector("#submitExerciseBtn");
 
-    while (createdImage.firstChild) {
-        createdImage.removeChild(createdImage.firstChild);
+    while (modalContent.firstChild) {
+        modalContent.removeChild(modalContent.firstChild);
+        submitExerciseBtn.remove();
     }
+
 }
