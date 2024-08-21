@@ -38,7 +38,6 @@ namespace PTManagementSystem.Services
 
                             if (result.HasRows)
                             {
-                                foundWorkout = true; // P sure this is redundant
                                 while (result.Read())
                                 {
                                     //val = (int)result.GetValue(0);
