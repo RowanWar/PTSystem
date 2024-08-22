@@ -84,8 +84,23 @@ let span = document.querySelector(".close");
 //3. Figure out how to join sets/reps into the query to view those too.
 //4. Probably add a new column "workoutCreatedAt" in "workout" to figure out how long elapsed the workout has been on page reload for the timer.
 function submitExercises() {
+    const UserId = 1;
     console.log('Onclick worked');
 
+    fetch('/Workout/SubmitExercises?UserId=' + UserId, {
+        method: "POST",
+        //Attaches the IDs of the exercises selected by the user in the request body
+        body: JSON.stringify({ exerciseIds: selectedTd }),
+    });
+
+    fetch('/Workout/SubmitExercises?UserId=' + UserId)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log('An error occurred fetching the data...')
+        })
 
 }
 

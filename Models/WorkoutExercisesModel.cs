@@ -14,13 +14,17 @@ namespace PTManagementSystem.Models
 
         public int ExerciseGroupId { get; set; }
 
+        public int ExerciseId { get; set; }
+
+        public int WorkoutExerciseId { get; set; }
+
         public DateTime WorkoutDate { get; set; }
 
         public TimeSpan Duration { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         public Boolean WorkoutActive{ get; set; }
 

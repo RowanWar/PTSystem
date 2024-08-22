@@ -56,11 +56,25 @@ namespace PTManagementSystem.Controllers
         }
 
 
+        public IActionResult InsertExercises(int WorkoutId, int ExerciseId)
+        {
+            WorkoutDAO exercise = new WorkoutDAO();
+            int result = exercise.AddExercisesToDatabase(WorkoutId, ExerciseId);
+
+            //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+            return Json(result);
+        }
+
+
         public IActionResult SubmitExercises(int UserId)
         {
             WorkoutDAO workout = new WorkoutDAO();
             List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
-            return View();
+
+            string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+            return Json(resultSerialized);
         }
 
         //Responds to a fetch request, providing a list of exercises from within the "exercise" table in the db

@@ -316,7 +316,7 @@ namespace PTManagementSystem.Services
             List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
 
             // Only returns a workout if workout_active == true
-            string sqlStatement = "SELECT * FROM workout WHERE workout_active is true and user_id = @UserId";
+            string sqlStatement = "SELECT * FROM workout WHERE workout_active and user_id = @UserId";
 
 
             using (var connection = new NpgsqlConnection(dbConnectionString))
@@ -332,7 +332,6 @@ namespace PTManagementSystem.Services
                     {
                         cmd.Parameters.AddWithValue("@UserId", UserId);
                         var result = cmd.ExecuteReader();
-                        //int val;
 
                         System.Diagnostics.Debug.WriteLine($"Query result: {result}");
 
@@ -347,8 +346,9 @@ namespace PTManagementSystem.Services
                                     UserId = (int)result["user_id"],
                                     WorkoutDate = (DateTime)result["workout_date"],
                                     Duration = (TimeSpan)result["duration"],
-                                    Notes = (string)result["notes"],
-                                    CreatedAt= (DateTime)result["created_at"],
+                                    // Checks if notes contains a null value, if so assigns null value to the result instead.
+                                    Notes = result["notes"] is DBNull ? (string?)null : (string)result["notes"],
+                                    CreatedAt = (DateTime)result["created_at"],
                                     WorkoutActive = (Boolean)result["workout_active"]
                                 });
                             }
@@ -370,6 +370,63 @@ namespace PTManagementSystem.Services
                 }
 
                 return foundWorkout;
+            }
+
+        }
+
+
+
+        public int AddExercisesToDatabase(int WorkoutId, int ExerciseId)
+        {
+            List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
+
+            // Only returns a workout if workout_active == true
+            //string sqlStatement = "SELECT * FROM workout_exercise WHERE workout_id = @WorkoutId";
+            string sqlStatement = "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')";
+            int result = 0;
+
+
+            //await using var batch = new NpgsqlBatch(dbConnectionString)
+            //{
+            //    BatchCommands =
+            //    {
+            //        new("insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000")
+            //    }
+            //};
+
+
+            using (var connection = new NpgsqlConnection(dbConnectionString))
+            {
+                try
+                {
+                    // Open the connection
+                    connection.Open();
+
+
+                    // Create a command object
+                    using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@WorkoutId", WorkoutId);
+                        cmd.Parameters.AddWithValue("@ExerciseId", ExerciseId);
+
+                        try
+                        {
+                            result = cmd.ExecuteNonQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any errors that might have occurred
+                    System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+
+                }
+
+                return result;
             }
 
         }
