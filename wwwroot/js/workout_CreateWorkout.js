@@ -5,6 +5,12 @@ let count = 00;
 document.addEventListener("DOMContentLoaded", function () {
     timer = true;
     stopWatch();
+
+    //fetch('/Workout/SubmitExercises?UserId=' + UserId, {
+    //    method: "POST",
+    //    //Attaches the IDs of the exercises selected by the user in the request body
+    //    body: JSON.stringify({ exerciseIds: selectedTd }),
+    //});
 });
 
 //stopBtn.addEventListener('click', function () {
@@ -93,7 +99,7 @@ function submitExercises() {
         body: JSON.stringify({ exerciseIds: selectedTd }),
     });
 
-    fetch('/Workout/SubmitExercises?UserId=' + UserId)
+    fetch('/Workout/InsertExercises?WorkoutId=' + 4)
         .then(response => response.json())
         .then(data => {
             console.log(data);

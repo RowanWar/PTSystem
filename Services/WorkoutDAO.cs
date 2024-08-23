@@ -6,6 +6,8 @@ namespace PTManagementSystem.Services
     public class WorkoutDAO : IWorkoutDataService
     {
         string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+        
+
 
         public List<WorkoutModel> GetAllWorkouts()
         {
@@ -376,60 +378,95 @@ namespace PTManagementSystem.Services
 
 
 
-        public int AddExercisesToDatabase(int WorkoutId, int ExerciseId)
+
+
+        public async Task<int> AddExercisesToDatabase(int WorkoutId, List<int> ExerciseIds)
         {
             List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
 
-            // Only returns a workout if workout_active == true
-            //string sqlStatement = "SELECT * FROM workout_exercise WHERE workout_id = @WorkoutId";
-            string sqlStatement = "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')";
+            //string sqlStatement = "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')";
             int result = 0;
 
-
-            //await using var batch = new NpgsqlBatch(dbConnectionString)
-            //{
-            //    BatchCommands =
-            //    {
-            //        new("insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000")
-            //    }
-            //};
+            // Opens an async db connection to allow for efficient insertions/reads in the database
+            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var connection = await dataSource.OpenConnectionAsync();
 
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using var batch = new NpgsqlBatch(connection);
+
+            foreach (var ExerciseId in ExerciseIds)
             {
-                try
+                batch.BatchCommands.Add(new NpgsqlBatchCommand(
+                    "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) " +
+                    "values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')")
                 {
-                    // Open the connection
-                    connection.Open();
-
-
-                    // Create a command object
-                    using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                    Parameters =
                     {
-                        cmd.Parameters.AddWithValue("@WorkoutId", WorkoutId);
-                        cmd.Parameters.AddWithValue("@ExerciseId", ExerciseId);
+                        new NpgsqlParameter("@WorkoutId", WorkoutId),
+                        new NpgsqlParameter("@ExerciseId", ExerciseId)
 
-                        try
-                        {
-                            result = cmd.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
-                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    // Handle any errors that might have occurred
-                    System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
-
-                }
-
-                return result;
+                });
             }
 
+            try
+            {
+                result = await batch.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+
+
+            return result;
+
         }
+
+
+       // public async Task<int> CreateWorkoutInDatabase(int UserId)
+       // {
+       //     List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
+
+       //     int result = 0;
+
+       //     // Opens an async db connection to allow for efficient insertions/reads in the database
+       //     await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+       //     await using var connection = await dataSource.OpenConnectionAsync();
+
+
+       //     using var batch = new NpgsqlBatch(connection);
+
+       //     foreach (var ExerciseId in ExerciseIds)
+       //     {
+       //         batch.BatchCommands.Add(new NpgsqlBatchCommand(
+       //             "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) " +
+       //             "values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')")
+       //         {
+       //             Parameters =
+       //             {
+       //                 new NpgsqlParameter("@WorkoutId", WorkoutId),
+       //                 new NpgsqlParameter("@ExerciseId", ExerciseId)
+
+       //             }
+       //         });
+       //     }
+
+       //     try
+       //     {
+       //         result = await batch.ExecuteNonQueryAsync();
+       //     }
+       //     catch (Exception ex)
+       //     {
+       //         System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+       //         throw;
+       //     }
+
+
+       //     return result;
+
+       //}
 
 
 

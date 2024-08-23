@@ -27,39 +27,45 @@ namespace PTManagementSystem.Controllers
 
         public IActionResult CreateWorkout()
         {
-            // this data should prolly not be static. Look to move this to an API pull for a maintainable list of categories in the database.
-            //var combinedModel = new WorkoutExercisesModel
-            //{
-                
-            //        MuscleGroupList = new List<SelectListItem>
-            //        {
-            //            new SelectListItem { Value = "Chest", Text = "Chest" },
-            //            new SelectListItem { Value = "Back", Text = "Back" },
-            //            new SelectListItem { Value = "Legs", Text = "Legs" },
-            //            new SelectListItem { Value = "Glutes", Text = "Glutes" }
-            //        },
-             
 
-            //        SetCategoryList = new List<SelectListItem>
-            //            {
-            //                new SelectListItem { Value = "Working Weight", Text = "Working Weight" },
-            //                new SelectListItem { Value = "Warm-Up", Text = "Warm-Up" },
-            //                new SelectListItem { Value = "Cluster", Text = "Cluster" },
-            //                new SelectListItem { Value = "Dropset", Text = "Dropset" },
-            //                new SelectListItem { Value = "Rest Pause", Text = "Rest Pause" },
-
-            //            }
-            //};
-
-            //was returning combinedModel
             return View();
         }
 
 
-        public IActionResult InsertExercises(int WorkoutId, int ExerciseId)
+        public IActionResult ViewActiveWorkoutByUserId(int UserId)
         {
+            WorkoutDAO workout = new WorkoutDAO();
+            List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
+
+            string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+            return Json(resultSerialized);
+        }
+
+
+        //public async Task<IActionResult> CreateWorkout(int UserId)
+        //{
+
+
+
+        //    WorkoutDAO exercise = new WorkoutDAO();
+        //    int result = await exercise.CreateWorkoutInDatabase(WorkoutId, ExerciseIds);
+
+        //    //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+        //    return Json(result);
+        //}
+
+
+
+        //Grabs the list of ExerciseIds from the POST body
+        public async Task<IActionResult> InsertExercises([FromBody] JsonElement data)
+        {
+
+            int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
+            List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").GetRawText());
             WorkoutDAO exercise = new WorkoutDAO();
-            int result = exercise.AddExercisesToDatabase(WorkoutId, ExerciseId);
+            int result = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
 
             //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
 
