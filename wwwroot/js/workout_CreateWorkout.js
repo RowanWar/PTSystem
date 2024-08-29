@@ -14,11 +14,18 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            let obj = JSON.parse(data);
-
+            //let obj = JSON.parse(data);
+            //console.log(obj);
             // If the user has an active workout, updates WorkoutId to this value i.e. WorkoutId = 200.
-            WorkoutId = obj[0].WorkoutId;
-            
+            //try {
+            //    WorkoutId = obj[0].WorkoutId;
+            //    console.log(WorkoutId);
+            //} catch (error) {
+            //    console.error(error);
+            //}
+            //if (WorkoutId != null) {
+            //    fetch()
+            //}
         })
         .catch(error => {
             console.log('Error occurred:', error);

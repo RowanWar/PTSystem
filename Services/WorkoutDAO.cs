@@ -5,6 +5,7 @@ using static Azure.Core.HttpHeader;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml.Linq;
+using System.Numerics;
 
 namespace PTManagementSystem.Services
 {
@@ -144,7 +145,7 @@ namespace PTManagementSystem.Services
                                         MuscleGroup = (string)result["muscle_group"],
                                         ExerciseDescription = (string)result["description"],
                                         Reps = (int)result["reps"],
-                                        SetCategory = (string)result["set_category_type"],
+                                        SetCategory = (int)result["set_category_type"],
                                         ExerciseGroupId = (int)result["workout_exercise_Id"],
                                         Weight = (decimal)result["weight"],
                                         SetId = (int)result["set_id"]
@@ -540,6 +541,109 @@ namespace PTManagementSystem.Services
 
                         result.Close();
                         //return foundClients;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any errors that might have occurred
+                    System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+
+                }
+
+                System.Diagnostics.Debug.WriteLine("Returning fetch request now...");
+                return foundActiveWorkout;
+            }
+
+        }
+
+
+
+
+
+
+        public List<WorkoutExercisesModel> ViewActiveWorkoutByUserId(int UserId)
+        {
+            List<WorkoutExercisesModel> foundActiveWorkout = new List<WorkoutExercisesModel>();
+
+            string sqlStatement = @"SELECT
+                                        w.workout_id,
+                                        w.workout_date,
+                                        w.duration AS workout_duration,
+                                        e.exercise_name,
+                                        e.muscle_group,
+                                        we.notes AS workout_exercise_notes,
+                                        COUNT(s.set_id) AS sets_count,
+                                        ARRAY_AGG(s.weight ORDER BY s.set_id) AS weights_per_set,
+                                        sc.set_category_type AS set_category,
+                                        MIN(s.starttime) AS workout_start_time,
+                                        MAX(s.endtime) AS workout_end_time
+                                    FROM
+                                        workout w
+                                    JOIN
+                                        workout_exercise we ON we.workout_id = w.workout_id
+                                    JOIN
+                                        exercise e ON e.exercise_id = we.exercise_id
+                                    JOIN
+                                        set s ON s.workout_exercise_id = we.workout_exercise_id
+                                    JOIN
+                                        set_category sc ON sc.set_category_id = s.set_category_id
+                                    WHERE
+                                        w.user_id = 1 
+                                        AND w.workout_active = true
+                                    GROUP BY
+                                        w.workout_id,
+                                        e.exercise_name,
+                                        e.muscle_group,
+                                        we.notes,
+                                        sc.set_category_type,
+                                        w.workout_date,
+                                        w.duration
+                                    ORDER BY
+                                        w.workout_date DESC,
+                                        e.exercise_name";
+
+            using (var connection = new NpgsqlConnection(dbConnectionString))
+            {
+                try
+                {
+                    // Open the connection
+                    connection.Open();
+
+
+                    // Create a command object
+                    using (var cmd = new NpgsqlCommand(sqlStatement, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        var result = cmd.ExecuteReader();
+                        System.Diagnostics.Debug.WriteLine($"Query result: {result}");
+
+                        if (result.HasRows)
+                        {
+                            while (result.Read())
+                            {
+                                //val = (int)result.GetValue(0);
+                                foundActiveWorkout.Add(new WorkoutExercisesModel
+                                {
+                                    ExerciseName = (string)result["exercise_name"],
+                                    MuscleGroup = (string)result["muscle_group"],
+                                    //ExerciseDescription = (string)result["description"],
+                                    //Reps = (int)result["reps"],
+                                    SetCategoryAsString = (string)result["set_category"],
+                                    //ExerciseGroupId = (int)result["workout_exercise_Id"],
+                                    //Weight = (decimal)result["weights_per_set"],
+                                    SetsCount = (Int64)result["sets_count"]
+                                    //SetId = (int)result["set_id"]
+                                });
+
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("No rows found.");
+
+                        }
+
+                        result.Close();
                     }
                 }
                 catch (Exception ex)

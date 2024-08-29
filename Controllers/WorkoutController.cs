@@ -119,11 +119,23 @@ namespace PTManagementSystem.Controllers
         public IActionResult CheckForActiveWorkout(int UserId)
         {
             WorkoutDAO result = new WorkoutDAO();
-            List<WorkoutModel> activeWorkout = result.CheckActiveWorkoutByUserId(UserId);
+            List<WorkoutModel> checkIfActiveWorkout = result.CheckActiveWorkoutByUserId(UserId);
 
-            string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+            //string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
+            System.Diagnostics.Debug.WriteLine(checkIfActiveWorkout);
 
+            if (checkIfActiveWorkout != null)
+            {
+                System.Diagnostics.Debug.WriteLine("If statement has run");
+
+                List<WorkoutExercisesModel> viewActiveWorkout = result.ViewActiveWorkoutByUserId(UserId);
+                string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
+
+                return Json(HasActiveWorkoutSerialized);
+            }
             System.Diagnostics.Debug.WriteLine(result);
+            string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
+
             return Json(resultSerialized);
             //return View("CreateWorkout", exerciseList);
         }

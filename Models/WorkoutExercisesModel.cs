@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace PTManagementSystem.Models
 {
@@ -41,11 +42,15 @@ namespace PTManagementSystem.Models
 
         public int SetId { get; set; }
 
+        public Int64 SetsCount { get; set; }
+
         public int Reps { get; set; }
 
         public decimal Weight { get; set; }
 
-        public string SetCategory { get; set; }
+        public int SetCategory { get; set; }
+
+        public string SetCategoryAsString { get; set; }
 
         public DateTime starttime { get; set; }
 
