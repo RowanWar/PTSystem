@@ -16,7 +16,6 @@ namespace PTManagementSystem.Services
         {
             List<ClientModel> foundClients = new List<ClientModel>();
 
-            bool foundUsers = false;
             string sqlStatement = "SELECT * FROM users";
 
 
@@ -38,7 +37,6 @@ namespace PTManagementSystem.Services
 
                         if (result.HasRows)
                         {
-                            foundUsers = true;
                             while (result.Read())
                             {
                                 //val = (int)result.GetValue(0);
@@ -63,7 +61,6 @@ namespace PTManagementSystem.Services
                         }
 
                         result.Close();
-                        //return foundClients;
                     }
                 }
                 catch (Exception ex)

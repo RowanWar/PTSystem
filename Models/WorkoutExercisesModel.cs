@@ -41,11 +41,15 @@ namespace PTManagementSystem.Models
 
         public int SetId { get; set; }
 
-        public int SetReps { get; set; }
+        public int Reps { get; set; }
 
-        public decimal SetWeight { get; set; }
+        public decimal Weight { get; set; }
 
         public string SetCategory { get; set; }
+
+        public DateTime starttime { get; set; }
+
+        public DateTime endtime { get; set; }
 
         //public IEnumerable<SelectListItem> SetCategoryList { get; set; }
     }

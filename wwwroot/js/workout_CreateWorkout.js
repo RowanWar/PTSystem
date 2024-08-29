@@ -2,20 +2,45 @@
 let second = 00;
 let count = 00;
 
+//Static UserId for now until proper config of logins 
+const UserId = 1;
+let WorkoutId = null;
+
 document.addEventListener("DOMContentLoaded", function () {
     timer = true;
     stopWatch();
 
-    //fetch('/Workout/SubmitExercises?UserId=' + UserId, {
-    //    method: "POST",
-    //    //Attaches the IDs of the exercises selected by the user in the request body
-    //    body: JSON.stringify({ exerciseIds: selectedTd }),
-    //});
+    fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            let obj = JSON.parse(data);
+
+            // If the user has an active workout, updates WorkoutId to this value i.e. WorkoutId = 200.
+            WorkoutId = obj[0].WorkoutId;
+            
+        })
+        .catch(error => {
+            console.log('Error occurred:', error);
+        });
+       
 });
 
-//stopBtn.addEventListener('click', function () {
-//    timer = false;
-//});
+//if (WorkoutId != null) {
+//    fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
+//        .then(response => response.json())
+//        .then(data => {
+//            console.log(data);
+//            let obj = JSON.parse(data);
+
+//            // If the user has an active workout, updates WorkoutId to this value i.e. WorkoutId = 200.
+//            WorkoutId = obj[0].WorkoutId;
+
+//        })
+//        .catch(error => {
+//            console.log('Error occurred:', error);
+//        });
+//}
 
 
 function stopWatch() {
@@ -90,44 +115,51 @@ let span = document.querySelector(".close");
 //3. Figure out how to join sets/reps into the query to view those too.
 //4. Probably add a new column "workoutCreatedAt" in "workout" to figure out how long elapsed the workout has been on page reload for the timer.
 function submitExercises() {
-    const UserId = 1;
+    const UserId = 1; // Assuming you might use UserId later
+    //let WorkoutId = 4;
     console.log('Onclick worked');
+    //console.log(WorkoutId)
+    //Converts the string array (required to be used by .push and .splice in activeRows()) to an integer so it can be parsed correctly by the backend, which only accepts <int> data type.
+    let ExerciseIdsIntArray = selectedExerciseIds.map(item => Number(item));
 
-    fetch('/Workout/SubmitExercises?UserId=' + UserId, {
+    fetch('/Workout/InsertExercises', {
         method: "POST",
-        //Attaches the IDs of the exercises selected by the user in the request body
-        body: JSON.stringify({ exerciseIds: selectedTd }),
-    });
-
-    fetch('/Workout/InsertExercises?WorkoutId=' + 4)
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ExerciseIds: ExerciseIdsIntArray, // This is now a stringified JSON array
+            WorkoutId: WorkoutId
+        })
+    })
         .then(response => response.json())
         .then(data => {
             console.log(data);
         })
         .catch(error => {
-            console.log('An error occurred fetching the data...')
-        })
-
+            console.log('Error occurred:', error);
+        });
 }
 
 
 
+
 // Stores a list of exercise IDs that the user has clicked on to be added to their workout
-let selectedTd = [];
+let selectedExerciseIds = [];
 function activeRows(tableData) {
     const tdId = tableData.getAttribute("data-exercise-id");
     //const tdId = td.id;
-    const tdIndex = selectedTd.indexOf(tdId);
+    const tdIndex = selectedExerciseIds.indexOf(tdId);
 
     if (tdIndex === -1) {
-        selectedTd.push(tdId);
+        selectedExerciseIds.push(tdId);
         tableData.style.background = "aqua";
     }
     else {
-        selectedTd.splice(tdIndex, 1);
+        selectedExerciseIds.splice(tdIndex, 1);
         tableData.style.background = "white";
     }
-    console.log('Clicked rows: ', selectedTd);
+    console.log('Clicked rows: ', selectedExerciseIds);
 };
 
 function addExerciseBtnClicked() {

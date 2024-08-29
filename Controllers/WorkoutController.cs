@@ -63,14 +63,32 @@ namespace PTManagementSystem.Controllers
         {
 
             int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
-            List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").GetRawText());
+            //List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").GetRawText());
+            List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").ToString());
             WorkoutDAO exercise = new WorkoutDAO();
-            int result = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
+            List<int> setIdsArr = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
 
+            // Adds a default empty set to every exercise created by the user for display purposes.
+            int result = await exercise.AddSetsToDatabase(setIdsArr);
+            System.Diagnostics.Debug.WriteLine(setIdsArr);
             //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
 
-            return Json(result);
+            return Json(setIdsArr);
         }
+
+        //public async Task<IActionResult> InsertSets([FromBody] JsonElement data)
+        //{
+
+        //    //int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
+        //    List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("WorkoutExerciseId").ToString());
+        //    WorkoutDAO sets = new WorkoutDAO();
+        //    List<int> result = await sets.AddSetsToDatabase(WorkoutExerciseId);
+
+        //    System.Diagnostics.Debug.WriteLine(result);
+        //    //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+        //    return Json(result);
+        //}
 
 
         public IActionResult SubmitExercises(int UserId)
@@ -84,13 +102,26 @@ namespace PTManagementSystem.Controllers
         }
 
         //Responds to a fetch request, providing a list of exercises from within the "exercise" table in the db
-        //Passes in the UserId within query to also display any custom exercises created by that user in the db
+        //Passes in the UserId within the query to also display any custom exercises created by that user in the db
         public IActionResult ViewExerciseList()
         {
             WorkoutDAO result = new WorkoutDAO();
             List<ExerciseModel> exerciseList = result.GetAllExercisesByUserId();
 
             string resultSerialized = JsonSerializer.Serialize(exerciseList);
+
+            System.Diagnostics.Debug.WriteLine(result);
+            return Json(resultSerialized);
+            //return View("CreateWorkout", exerciseList);
+        }   
+        
+
+        public IActionResult CheckForActiveWorkout(int UserId)
+        {
+            WorkoutDAO result = new WorkoutDAO();
+            List<WorkoutModel> activeWorkout = result.CheckActiveWorkoutByUserId(UserId);
+
+            string resultSerialized = JsonSerializer.Serialize(activeWorkout);
 
             System.Diagnostics.Debug.WriteLine(result);
             return Json(resultSerialized);

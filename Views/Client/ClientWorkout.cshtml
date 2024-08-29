@@ -13,10 +13,10 @@
                 @Html.DisplayNameFor(model => model.WorkoutDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkoutDuration)
+                @Html.DisplayNameFor(model => model.Duration)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkoutCreatedAt)
+                @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
             <th></th>
         </tr>
@@ -31,10 +31,10 @@
                 @Html.DisplayFor(modelItem => item.WorkoutDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WorkoutDuration)
+                @Html.DisplayFor(modelItem => item.Duration)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WorkoutCreatedAt)
+                @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
                 @Html.ActionLink("Workout Details", "WorkoutDetails", new { item.WorkoutId })
