@@ -13,9 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            //let obj = JSON.parse(data);
-            //console.log(obj);
+            //console.log(data);
+            let activeWorkoutObj = JSON.parse(data);
+            //console.log(activeWorkoutObj);
+            loadActiveWorkoutExercises(activeWorkoutObj);
             // If the user has an active workout, updates WorkoutId to this value i.e. WorkoutId = 200.
             //try {
             //    WorkoutId = obj[0].WorkoutId;
@@ -149,6 +150,49 @@ function submitExercises() {
 }
 
 
+function loadActiveWorkoutExercises(activeWorkoutObj) {
+    let modalContent = document.querySelector("#activeWorkoutContainer");
+
+    let generateTable = document.createElement("table");
+    generateTable.setAttribute("id", "activeWorkoutTable");
+    modalContent.appendChild(generateTable);
+    const columnNames = ["ExerciseName", "MuscleGroup"];
+
+    // Pre-cache the length of the array prior to for loop to improve performance
+    const arrayLength = activeWorkoutObj.length;
+    // Iterates through each exercise and displays it within its own table row attribute
+    for (let i = 0; i < arrayLength; i++) {
+        console.log(activeWorkoutObj[i]);
+
+        activeWorkoutObj.forEach()
+        // Keep all the variables in one section for maintainability
+        let exerciseName = activeWorkoutObj[i]["ExerciseName"];
+        let muscleGroup = activeWorkoutObj[i]["MuscleGroup"];
+        let sets = activeWorkoutObj[i]["Sets"];
+        let reps = activeWorkoutObj[i]["Reps"];
+
+
+        
+        
+        let newRow = generateTable.insertRow();
+        
+        let newCell = newRow.insertCell();
+        let newCell2 = newRow.insertCell();
+        //newCell.setAttribute("data-exercise-id", exerciseId);
+
+        let addExerciseName = document.createTextNode(exerciseName);
+        let addMuscleGroup = document.createTextNode(muscleGroup);
+        let addSets = document.createTextNode(sets);
+        let addReps = document.createTextNode(reps);
+
+
+        newCell.appendChild(addExerciseName);
+        newCell2.appendChild(addMuscleGroup);
+        newCell.appendChild(addSets);
+        newCell.appendChild(addReps);
+
+    }
+}
 
 
 // Stores a list of exercise IDs that the user has clicked on to be added to their workout
