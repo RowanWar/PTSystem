@@ -2,7 +2,7 @@
 let second = 00;
 let count = 00;
 
-//Static UserId for now until proper config of logins 
+// Static for now, this should be fetched later upon user login.
 const UserId = 1;
 let WorkoutId = null;
 
@@ -16,17 +16,25 @@ document.addEventListener("DOMContentLoaded", function () {
             //console.log(data);
             let activeWorkoutObj = JSON.parse(data);
             //console.log(activeWorkoutObj);
-            loadActiveWorkoutExercises(activeWorkoutObj);
+            /*loadActiveWorkoutExercises(activeWorkoutObj);*/
+
             // If the user has an active workout, updates WorkoutId to this value i.e. WorkoutId = 200.
             //try {
-            //    WorkoutId = obj[0].WorkoutId;
-            //    console.log(WorkoutId);
+            //    if activeWorkoutObj.WorkoutId != null {
+            //        WorkoutId = activeWorkoutObj[0].WorkoutId;
+            //        console.log(WorkoutId);
+            //    }
+
             //} catch (error) {
             //    console.error(error);
             //}
-            //if (WorkoutId != null) {
-            //    fetch()
-            //}
+
+            WorkoutId = activeWorkoutObj[0].WorkoutId;
+            console.log(activeWorkoutObj);
+            console.log("Workout ID: " + WorkoutId);
+            if (WorkoutId != null) {
+                loadActiveWorkoutExercises(activeWorkoutObj);
+            }
         })
         .catch(error => {
             console.log('Error occurred:', error);
@@ -100,17 +108,6 @@ function stopWatch() {
     }
 };
 
-//registerNewWorkout();
-//function registerNewWorkout() {
-//    localStorage.setItem("workout", "Chest");
-//};
-
-//const activeWorkout = localStorage.getItem("workout");
-//console.log(activeWorkout);
-
-
-
-
 
 
 let modal = document.getElementById("myModal");
@@ -123,20 +120,20 @@ let span = document.querySelector(".close");
 //3. Figure out how to join sets/reps into the query to view those too.
 //4. Probably add a new column "workoutCreatedAt" in "workout" to figure out how long elapsed the workout has been on page reload for the timer.
 function submitExercises() {
-    const UserId = 1; // Assuming you might use UserId later
-    //let WorkoutId = 4;
-    console.log('Onclick worked');
-    //console.log(WorkoutId)
-    //Converts the string array (required to be used by .push and .splice in activeRows()) to an integer so it can be parsed correctly by the backend, which only accepts <int> data type.
-    let ExerciseIdsIntArray = selectedExerciseIds.map(item => Number(item));
+    
+    console.log(WorkoutId);
+    console.log(selectedExerciseIds);
 
+    //Converts the GLOBAL string array (required to be used by .push and .splice in activeRows()) to an integer so it can be parsed correctly by the backend, which only accepts <int> data type.
+    let ExerciseIdsIntArray = selectedExerciseIds.map(item => Number(item));
+    console.log(ExerciseIdsIntArray);
     fetch('/Workout/InsertExercises', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            ExerciseIds: ExerciseIdsIntArray, // This is now a stringified JSON array
+            ExerciseIds: ExerciseIdsIntArray, 
             WorkoutId: WorkoutId
         })
     })
@@ -151,51 +148,48 @@ function submitExercises() {
 
 
 function loadActiveWorkoutExercises(activeWorkoutObj) {
+    fetch('/Workout/ViewActiveWorkoutByUserId?UserId')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log('Error occurred:', error);
+        });
+
     let modalContent = document.querySelector("#activeWorkoutContainer");
 
+    // Create the table element
     let generateTable = document.createElement("table");
     generateTable.setAttribute("id", "activeWorkoutTable");
     modalContent.appendChild(generateTable);
-    const columnNames = ["ExerciseName", "MuscleGroup"];
 
-    // Pre-cache the length of the array prior to for loop to improve performance
-    const arrayLength = activeWorkoutObj.length;
-    // Iterates through each exercise and displays it within its own table row attribute
-    for (let i = 0; i < arrayLength; i++) {
-        console.log(activeWorkoutObj[i]);
-
-        activeWorkoutObj.forEach()
-        // Keep all the variables in one section for maintainability
-        let exerciseName = activeWorkoutObj[i]["ExerciseName"];
-        let muscleGroup = activeWorkoutObj[i]["MuscleGroup"];
-        let sets = activeWorkoutObj[i]["Sets"];
-        let reps = activeWorkoutObj[i]["Reps"];
-
-
-        
-        
+    // Dictates the list of columns to be displayed on the page
+    const columnNames = ["SetsCount", "ExerciseName", "MuscleGroup", "WeightsPerSet", "Reps"];
+    console.log(activeWorkoutObj);
+    // Iterate through each item in activeWorkoutObj
+    activeWorkoutObj.forEach(workout => {
+        // Create a new row for each workout entry
         let newRow = generateTable.insertRow();
-        
-        let newCell = newRow.insertCell();
-        let newCell2 = newRow.insertCell();
-        //newCell.setAttribute("data-exercise-id", exerciseId);
 
-        let addExerciseName = document.createTextNode(exerciseName);
-        let addMuscleGroup = document.createTextNode(muscleGroup);
-        let addSets = document.createTextNode(sets);
-        let addReps = document.createTextNode(reps);
+        // Iterate through each column name
+        columnNames.forEach(column => {
+            // Create a new cell in the row
+            let newCell = newRow.insertCell();
 
+            // Get the value from the workout object
+            let cellValue = workout[column];
 
-        newCell.appendChild(addExerciseName);
-        newCell2.appendChild(addMuscleGroup);
-        newCell.appendChild(addSets);
-        newCell.appendChild(addReps);
+            let textNode = document.createTextNode(cellValue);
 
-    }
+            // Append the text node to a unique td
+            newCell.appendChild(textNode);
+        });
+    });
 }
 
 
-// Stores a list of exercise IDs that the user has clicked on to be added to their workout
+// Stores a GLOBAL list of exercise IDs that the user has clicked on to be added to their workout
 let selectedExerciseIds = [];
 function activeRows(tableData) {
     const tdId = tableData.getAttribute("data-exercise-id");
@@ -245,7 +239,7 @@ function addExerciseBtnClicked() {
                 let addContent = document.createTextNode(exerciseName);
                 newCell.appendChild(addContent);
 
-                // This cannot be a lambda func as "this" context does not work.
+                // This cannot be a lambda function, as it requires the use of "this" (i.e. referencing itself) to work.
                 newCell.addEventListener("click", function () {
                     newCell.classList.toggle("highlightCell")
                     
@@ -256,12 +250,15 @@ function addExerciseBtnClicked() {
                 });
             }
 
+            // Dynamically generates the submit exercise button at the bottom of the modal
             let submitExerciseBtn = document.createElement("button");
             submitExerciseBtn.setAttribute("id", "submitExerciseBtn");
+
             // Populates text inside the button
             submitExerciseBtn.appendChild(document.createTextNode("Submit exercises"));
             submitExerciseBtn.onclick = submitExercises;
-            //submitExerciseBtn.addEventListener("click", submitExercises);
+
+            // Adds the button to the page as the last child element of the modal pop-up
             modalContent.after(submitExerciseBtn);
 
 

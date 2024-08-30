@@ -35,11 +35,19 @@ namespace PTManagementSystem.Controllers
         public IActionResult ViewActiveWorkoutByUserId(int UserId)
         {
             WorkoutDAO workout = new WorkoutDAO();
-            List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
+            //List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
 
-            string resultSerialized = JsonSerializer.Serialize(activeWorkout);
 
-            return Json(resultSerialized);
+            System.Diagnostics.Debug.WriteLine("If statement has run");
+
+            List<WorkoutExercisesModel> viewActiveWorkout = workout.ViewActiveWorkoutByUserId(UserId);
+            string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
+
+            return Json(HasActiveWorkoutSerialized);
+
+            //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+
+            //return Json(resultSerialized);
         }
 
 
@@ -124,15 +132,15 @@ namespace PTManagementSystem.Controllers
             //string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
             System.Diagnostics.Debug.WriteLine(checkIfActiveWorkout);
 
-            if (checkIfActiveWorkout != null)
-            {
-                System.Diagnostics.Debug.WriteLine("If statement has run");
+            //if (checkIfActiveWorkout != null)
+            //{
+            //    System.Diagnostics.Debug.WriteLine("If statement has run");
 
-                List<WorkoutExercisesModel> viewActiveWorkout = result.ViewActiveWorkoutByUserId(UserId);
-                string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
+            //    List<WorkoutExercisesModel> viewActiveWorkout = result.ViewActiveWorkoutByUserId(UserId);
+            //    string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
 
-                return Json(HasActiveWorkoutSerialized);
-            }
+            //    return Json(HasActiveWorkoutSerialized);
+            //}
             System.Diagnostics.Debug.WriteLine(result);
             string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
 

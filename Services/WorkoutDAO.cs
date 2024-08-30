@@ -324,7 +324,8 @@ namespace PTManagementSystem.Services
             List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
 
             // Only returns a workout if workout_active == true
-            string sqlStatement = "SELECT * FROM workout WHERE workout_active and user_id = @UserId";
+            string sqlStatement = "SELECT * FROM workout WHERE workout_active and user_id = @UserId" +
+                "RETURNING workout_id";
 
 
             using (var connection = new NpgsqlConnection(dbConnectionString))
@@ -629,8 +630,7 @@ namespace PTManagementSystem.Services
                                     //ExerciseDescription = (string)result["description"],
                                     //Reps = (int)result["reps"],
                                     SetCategoryAsString = (string)result["set_category"],
-                                    //ExerciseGroupId = (int)result["workout_exercise_Id"],
-                                    //Weight = (decimal)result["weights_per_set"],
+                                    WeightPerSet = (Array)result["weights_per_set"],
                                     SetsCount = (Int64)result["sets_count"]
                                     //SetId = (int)result["set_id"]
                                 });

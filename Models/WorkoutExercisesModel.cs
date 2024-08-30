@@ -48,6 +48,9 @@ namespace PTManagementSystem.Models
 
         public decimal Weight { get; set; }
 
+        // Used to display an array of weight per set to the user in the front-end from CheckForActiveWeight() query.
+        public Array WeightPerSet { get; set; }
+
         public int SetCategory { get; set; }
 
         public string SetCategoryAsString { get; set; }
