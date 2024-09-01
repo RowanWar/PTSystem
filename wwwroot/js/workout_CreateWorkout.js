@@ -31,7 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             WorkoutId = activeWorkoutObj[0].WorkoutId;
             console.log(activeWorkoutObj);
+
             console.log("Workout ID: " + WorkoutId);
+
+            // If the first API lookup does not return a valid WorkoutId, the second API lookup which pulls the users active workout does not initiate.
             if (WorkoutId != null) {
                 loadActiveWorkoutExercises(activeWorkoutObj);
             }
@@ -148,44 +151,63 @@ function submitExercises() {
 
 
 function loadActiveWorkoutExercises(activeWorkoutObj) {
-    fetch('/Workout/ViewActiveWorkoutByUserId?UserId')
+    fetch('/Workout/ViewActiveWorkoutByUserId?UserId=' + UserId)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+
+            // Dictates the list of columns to be displayed on the page
+            const columnNames = ["SetsCount", "WeightPerSet", "RepsPerSet", "SetCategoryArray"];
+            let activeWorkoutObj = JSON.parse(data);
+
+
+            let activeWorkoutContainer = document.querySelector("#activeWorkoutContainer");
+            let generateTable = document.createElement("table");
+            generateTable.setAttribute("id", "activeWorkoutTable");
+            activeWorkoutContainer.appendChild(generateTable);
+
+
+            // Iterate through each item in activeWorkoutObj
+            activeWorkoutObj.forEach(workout => {
+                // Create a new "header" row for each workout entry which displays the number of sets and name of exercise. This is used for collapsing/expanding an exercise and its related sets
+                let newRowHead = generateTable.insertRow();
+                // Create a row beneath the header row which displays the rest of the exercise data i.e. category, exercise type, reps etc.
+                let newRow = generateTable.insertRow();
+
+                let newCellHeadSetsCount = newRowHead.insertCell();
+                let newCellHeadExerciseName = newRowHead.insertCell();            
+
+                let cellExerciseName = workout["ExerciseName"];
+                let cellNoOfSetsValue = workout["SetsCount"];
+
+                let textNodeExerciseName = document.createTextNode(cellExerciseName);
+                let textNodeSets = document.createTextNode(cellNoOfSetsValue);
+                
+                newCellHeadSetsCount.appendChild(textNodeSets);
+                newCellHeadExerciseName.appendChild(textNodeExerciseName);                
+                
+                
+
+                // Iterate through each column name
+                columnNames.forEach(column => {
+                    // Create a new cell in the row
+                    let newCell = newRow.insertCell();
+
+                    // Get the value from the workout object
+                    let cellValue = workout[column];
+
+                    let textNode = document.createTextNode(cellValue);
+
+
+                    // Append the text node to a unique td
+                    newCell.appendChild(textNode);
+
+                });
+            });
         })
         .catch(error => {
             console.log('Error occurred:', error);
         });
 
-    let modalContent = document.querySelector("#activeWorkoutContainer");
-
-    // Create the table element
-    let generateTable = document.createElement("table");
-    generateTable.setAttribute("id", "activeWorkoutTable");
-    modalContent.appendChild(generateTable);
-
-    // Dictates the list of columns to be displayed on the page
-    const columnNames = ["SetsCount", "ExerciseName", "MuscleGroup", "WeightsPerSet", "Reps"];
-    console.log(activeWorkoutObj);
-    // Iterate through each item in activeWorkoutObj
-    activeWorkoutObj.forEach(workout => {
-        // Create a new row for each workout entry
-        let newRow = generateTable.insertRow();
-
-        // Iterate through each column name
-        columnNames.forEach(column => {
-            // Create a new cell in the row
-            let newCell = newRow.insertCell();
-
-            // Get the value from the workout object
-            let cellValue = workout[column];
-
-            let textNode = document.createTextNode(cellValue);
-
-            // Append the text node to a unique td
-            newCell.appendChild(textNode);
-        });
-    });
 }
 
 

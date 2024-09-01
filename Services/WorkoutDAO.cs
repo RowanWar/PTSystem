@@ -145,7 +145,7 @@ namespace PTManagementSystem.Services
                                         MuscleGroup = (string)result["muscle_group"],
                                         ExerciseDescription = (string)result["description"],
                                         Reps = (int)result["reps"],
-                                        SetCategory = (int)result["set_category_type"],
+                                        SetCategory = (string)result["set_category_type"],
                                         ExerciseGroupId = (int)result["workout_exercise_Id"],
                                         Weight = (decimal)result["weight"],
                                         SetId = (int)result["set_id"]
@@ -575,7 +575,8 @@ namespace PTManagementSystem.Services
                                         we.notes AS workout_exercise_notes,
                                         COUNT(s.set_id) AS sets_count,
                                         ARRAY_AGG(s.weight ORDER BY s.set_id) AS weights_per_set,
-                                        sc.set_category_type AS set_category,
+                                        ARRAY_AGG(sc.set_category_type ORDER BY s.set_id) AS set_category,
+                                        ARRAY_AGG(s.reps ORDER BY s.set_id) AS reps_per_set,
                                         MIN(s.starttime) AS workout_start_time,
                                         MAX(s.endtime) AS workout_end_time
                                     FROM
@@ -589,7 +590,7 @@ namespace PTManagementSystem.Services
                                     JOIN
                                         set_category sc ON sc.set_category_id = s.set_category_id
                                     WHERE
-                                        w.user_id = 1 
+                                        w.user_id = @UserId
                                         AND w.workout_active = true
                                     GROUP BY
                                         w.workout_id,
@@ -627,12 +628,11 @@ namespace PTManagementSystem.Services
                                 {
                                     ExerciseName = (string)result["exercise_name"],
                                     MuscleGroup = (string)result["muscle_group"],
-                                    //ExerciseDescription = (string)result["description"],
-                                    //Reps = (int)result["reps"],
-                                    SetCategoryAsString = (string)result["set_category"],
+                                    WorkoutExerciseNotes = (string)result["workout_exercise_notes"],
+                                    SetsCount = (Int64)result["sets_count"],
+                                    RepsPerSet = (Array)result["reps_per_set"],
                                     WeightPerSet = (Array)result["weights_per_set"],
-                                    SetsCount = (Int64)result["sets_count"]
-                                    //SetId = (int)result["set_id"]
+                                    SetCategoryArray = (Array)result["set_category"]
                                 });
 
                             }

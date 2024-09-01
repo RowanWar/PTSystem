@@ -33,6 +33,8 @@ namespace PTManagementSystem.Models
 
         public string ExerciseName { get; set; }
 
+        public string WorkoutExerciseNotes { get; set; }
+
         public string MuscleGroup { get; set; }
 
         /*stores a list of muscle groups for a dropdown list in the view. List options stored directly in the controller*/
@@ -46,14 +48,17 @@ namespace PTManagementSystem.Models
 
         public int Reps { get; set; }
 
+        public Array RepsPerSet { get; set; }
+
         public decimal Weight { get; set; }
 
         // Used to display an array of weight per set to the user in the front-end from CheckForActiveWeight() query.
         public Array WeightPerSet { get; set; }
 
-        public int SetCategory { get; set; }
+        public string SetCategory { get; set; }
 
-        public string SetCategoryAsString { get; set; }
+        public Array SetCategoryArray { get; set; }
+        //public string SetCategoryAsString { get; set; }
 
         public DateTime starttime { get; set; }
 
