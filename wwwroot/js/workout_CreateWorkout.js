@@ -162,7 +162,7 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
 
             let activeWorkoutContainer = document.querySelector("#activeWorkoutContainer");
             let generateTable = document.createElement("table");
-            generateTable.setAttribute("id", "activeWorkoutTable");
+            generateTable.setAttribute("class", "activeWorkoutTable");
             activeWorkoutContainer.appendChild(generateTable);
 
 
@@ -170,8 +170,12 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
             activeWorkoutObj.forEach(workout => {
                 // Create a new "header" row for each workout entry which displays the number of sets and name of exercise. This is used for collapsing/expanding an exercise and its related sets
                 let newRowHead = generateTable.insertRow();
-                // Create a row beneath the header row which displays the rest of the exercise data i.e. category, exercise type, reps etc.
-                let newRow = generateTable.insertRow();
+                newRowHead.className = "headerRow";
+                newRowHead.setAttribute("headerworkoutexerciseid", workout["WorkoutExerciseId"]);
+                newRowHead.addEventListener("click", collapseExerciseSets);
+
+                //newRowHead.setAttribute("id", "headerRow");
+
 
                 let newCellHeadSetsCount = newRowHead.insertCell();
                 let newCellHeadExerciseName = newRowHead.insertCell();            
@@ -185,23 +189,31 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
                 newCellHeadSetsCount.appendChild(textNodeSets);
                 newCellHeadExerciseName.appendChild(textNodeExerciseName);                
                 
-                
+                // Iterate through the workout object exercises based on the amount of sets in the exercise
+                for (let i = 0; i < workout.SetsCount; i++) {
+                    console.log(workout["WeightPerSet"][i]);
 
-                // Iterate through each column name
-                columnNames.forEach(column => {
-                    // Create a new cell in the row
-                    let newCell = newRow.insertCell();
+                    let newRow = generateTable.insertRow();
+                    // Appends the ID of the exercise (essentially a unique ID referencing this ID + set_id) so a workout can have two of same exercises with unique sets.
+                    newRow.setAttribute("workoutexerciseid", workout["WorkoutExerciseId"]);
 
-                    // Get the value from the workout object
-                    let cellValue = workout[column];
-
-                    let textNode = document.createTextNode(cellValue);
+                    let weightPerSet = workout["WeightPerSet"][i];
+                    let repsPerSet = workout["RepsPerSet"][i];
+                    let setCategory = workout["SetCategoryArray"][i];
 
 
-                    // Append the text node to a unique td
-                    newCell.appendChild(textNode);
+                    // Insert cells for each data point
+                    let weightCell = newRow.insertCell();
+                    let repsCell = newRow.insertCell();
+                    let categoryCell = newRow.insertCell();
 
-                });
+                    categoryCell.appendChild(document.createTextNode(setCategory));
+                    weightCell.appendChild(document.createTextNode(weightPerSet));
+                    repsCell.appendChild(document.createTextNode(repsPerSet));
+                    repsCell.className = "RepsClass";
+
+                }
+
             });
         })
         .catch(error => {
@@ -305,4 +317,8 @@ span.onclick = function () {
         submitExerciseBtn.remove();
     }
 
+};
+
+function collapseExerciseSets() {
+    console.log("Clicked")
 }

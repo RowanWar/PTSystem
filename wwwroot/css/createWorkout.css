@@ -6,6 +6,27 @@
     padding: 50px;
 }*/
 
+#activeWorkoutContainer {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+
+#activeWorkoutTable {
+    width: 100%;
+
+}
+
+.headerRow {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 3em;
+}
+
+tr {
+    border: 0.1px dotted red;
+}
+
 #submitExerciseBtn {
     width: 100%;
     height: 4em;

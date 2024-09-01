@@ -570,9 +570,11 @@ namespace PTManagementSystem.Services
                                         w.workout_id,
                                         w.workout_date,
                                         w.duration AS workout_duration,
+	                                    w.workout_active,
                                         e.exercise_name,
                                         e.muscle_group,
                                         we.notes AS workout_exercise_notes,
+	                                    s.workout_exercise_id,
                                         COUNT(s.set_id) AS sets_count,
                                         ARRAY_AGG(s.weight ORDER BY s.set_id) AS weights_per_set,
                                         ARRAY_AGG(sc.set_category_type ORDER BY s.set_id) AS set_category,
@@ -590,19 +592,19 @@ namespace PTManagementSystem.Services
                                     JOIN
                                         set_category sc ON sc.set_category_id = s.set_category_id
                                     WHERE
-                                        w.user_id = @UserId
+                                        w.user_id = 1 
                                         AND w.workout_active = true
                                     GROUP BY
+	                                    s.workout_exercise_id,
                                         w.workout_id,
                                         e.exercise_name,
                                         e.muscle_group,
                                         we.notes,
-                                        sc.set_category_type,
                                         w.workout_date,
                                         w.duration
                                     ORDER BY
                                         w.workout_date DESC,
-                                        e.exercise_name";
+                                        e.exercise_name;";
 
             using (var connection = new NpgsqlConnection(dbConnectionString))
             {
@@ -627,6 +629,7 @@ namespace PTManagementSystem.Services
                                 foundActiveWorkout.Add(new WorkoutExercisesModel
                                 {
                                     ExerciseName = (string)result["exercise_name"],
+                                    WorkoutExerciseId = (int)result["workout_exercise_id"],
                                     MuscleGroup = (string)result["muscle_group"],
                                     WorkoutExerciseNotes = (string)result["workout_exercise_notes"],
                                     SetsCount = (Int64)result["sets_count"],
