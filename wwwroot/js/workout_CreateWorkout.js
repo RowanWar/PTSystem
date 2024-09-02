@@ -7,6 +7,11 @@ const UserId = 1;
 let WorkoutId = null;
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Load all the saved data from localstorage 
+    const localStorageData = localStorage.getItem("setComplete");
+    console.log(localStorageData);
+
     timer = true;
     stopWatch();
 
@@ -191,11 +196,13 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
                 
                 // Iterate through the workout object exercises based on the amount of sets in the exercise
                 for (let i = 0; i < workout.SetsCount; i++) {
-                    console.log(workout["WeightPerSet"][i]);
+                    //console.log(workout["WeightPerSet"][i]);
 
                     let newRow = generateTable.insertRow();
                     // Appends the ID of the exercise (essentially a unique ID referencing this ID + set_id) so a workout can have two of same exercises with unique sets.
                     newRow.setAttribute("workoutexerciseid", workout["WorkoutExerciseId"]);
+
+                    
 
                     let weightPerSet = workout["WeightPerSet"][i];
                     let repsPerSet = workout["RepsPerSet"][i];
@@ -208,10 +215,19 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
                     let categoryCell = newRow.insertCell();
 
                     categoryCell.appendChild(document.createTextNode(setCategory));
-                    weightCell.appendChild(document.createTextNode(weightPerSet));
-                    repsCell.appendChild(document.createTextNode(repsPerSet));
-                    repsCell.className = "RepsClass";
 
+                    weightCell.appendChild(document.createTextNode(weightPerSet));
+                    weightCell.setAttribute("contenteditable", "true");
+
+                    repsCell.appendChild(document.createTextNode(repsPerSet));
+                    repsCell.setAttribute("contenteditable", "true");
+
+                    // Generates the button which marks a set as complete
+                    let setButton = document.createElement("button");
+                    setButton.setAttribute("class", "setButton");
+                    // Utilises adding/removing a css class to add/remove the toggle in the frontend
+                    setButton.addEventListener("click", setButtonClicked);
+                    newRow.appendChild(setButton);
                 }
 
             });
@@ -319,6 +335,90 @@ span.onclick = function () {
 
 };
 
-function collapseExerciseSets() {
-    console.log("Clicked")
+function collapseExerciseSets(event) {
+    // Prevent the default action, if necessary, to avoid unwanted behavior.
+    //event.preventDefault();
+
+    // `this` refers to the element that was clicked, i.e., the one with the onclick event.
+    // To get the parent element of this clicked element, you can use `this.parentElement`.
+    // However, if you are targeting children of this element itself, you can just use `this`.
+
+    // The parent element of the row clicked
+    let parentElement = this; 
+    let workoutExerciseId = this.getAttribute("headerworkoutexerciseid");
+
+    let matchingRows = document.querySelectorAll(`[workoutexerciseid='${workoutExerciseId}']`);
+    console.log(matchingRows);
+
+    // Toggle the display of each matching row
+    matchingRows.forEach(row => {
+        if (row.style.display === "none" || row.style.display === "") {
+            row.style.display = "table-row"; // Use the appropriate display type for your table
+        } else {
+            row.style.display = "none";
+        };
+    });
+};
+
+
+
+
+
+
+document.getElementById('start-button').addEventListener('click', startTimer);
+document.getElementById('add-time-button').addEventListener('click', addTimeToTimer);
+
+function startTimer() {
+    let duration = 60 * 2; // Set the duration in seconds (e.g., 5 minutes)
+    const countdownDisplay = document.getElementById('countdown-timer');
+    const addTimeButton = document.querySelector("#add-time-button");
+
+
+
+    let timerInterval = setInterval(() => {
+        let minutes = Math.floor(duration / 60);
+        let seconds = duration % 60;
+
+        // Format minutes and seconds to be always two digits
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        countdownDisplay.textContent = `${minutes}:${seconds}`;
+
+        if (duration <= 0) {
+            clearInterval(timerInterval);
+            countdownDisplay.textContent = "Weight go brr!";
+        }
+
+        duration--;
+    }, 1000);
+};
+
+
+function addTimeToTimer() {
+
 }
+
+
+function setButtonClicked(e) {
+    setCompleteArray = [];
+    let parentElem = this.parentElement;
+    
+    console.log(parentElem);
+
+    startTimer();
+
+    if (parentElem.classList.contains("setComplete")) {
+        parentElem.classList.remove("setComplete");
+        setCompleteArray.splice(setCompleteArray.indexOf(parentElem), 1);
+    } else {
+        parentElem.classList.toggle("setComplete");
+        setCompleteArray.push(parentElem);
+        //localStorage.setItem("setComplete", parentElem);
+    }
+
+    console.log(setCompleteArray)
+    
+}
+
+/*console.log(localStorage.getItem("setComplete"));*/
