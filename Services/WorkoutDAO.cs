@@ -570,17 +570,16 @@ namespace PTManagementSystem.Services
                                         w.workout_id,
                                         w.workout_date,
                                         w.duration AS workout_duration,
-	                                    w.workout_active,
                                         e.exercise_name,
                                         e.muscle_group,
                                         we.notes AS workout_exercise_notes,
 	                                    s.workout_exercise_id,
-                                        COUNT(s.set_id) AS sets_count,
-                                        ARRAY_AGG(s.weight ORDER BY s.set_id) AS weights_per_set,
-                                        ARRAY_AGG(sc.set_category_type ORDER BY s.set_id) AS set_category,
-                                        ARRAY_AGG(s.reps ORDER BY s.set_id) AS reps_per_set,
-                                        MIN(s.starttime) AS workout_start_time,
-                                        MAX(s.endtime) AS workout_end_time
+                                        s.set_id,
+                                        s.weight,
+	                                    s.reps,
+                                        sc.set_category_type AS set_category,
+                                        s.starttime AS set_start_time,
+                                        s.endtime AS set_end_time
                                     FROM
                                         workout w
                                     JOIN
@@ -592,19 +591,13 @@ namespace PTManagementSystem.Services
                                     JOIN
                                         set_category sc ON sc.set_category_id = s.set_category_id
                                     WHERE
-                                        w.user_id = 1 
+                                        w.user_id = @UserId
                                         AND w.workout_active = true
-                                    GROUP BY
-	                                    s.workout_exercise_id,
-                                        w.workout_id,
-                                        e.exercise_name,
-                                        e.muscle_group,
-                                        we.notes,
-                                        w.workout_date,
-                                        w.duration
                                     ORDER BY
                                         w.workout_date DESC,
-                                        e.exercise_name;";
+                                        e.exercise_name,
+                                        s.workout_exercise_id,
+	                                    s.set_id;";
 
             using (var connection = new NpgsqlConnection(dbConnectionString))
             {
@@ -632,10 +625,11 @@ namespace PTManagementSystem.Services
                                     WorkoutExerciseId = (int)result["workout_exercise_id"],
                                     MuscleGroup = (string)result["muscle_group"],
                                     WorkoutExerciseNotes = (string)result["workout_exercise_notes"],
-                                    SetsCount = (Int64)result["sets_count"],
-                                    RepsPerSet = (Array)result["reps_per_set"],
-                                    WeightPerSet = (Array)result["weights_per_set"],
-                                    SetCategoryArray = (Array)result["set_category"]
+                                    //SetsCount = (Int64)result["sets_count"],
+                                    Reps = (int)result["reps"],
+                                    Weight = (Decimal)result["weight"],
+                                    SetId = (int)result["set_id"],
+                                    SetCategory = (string)result["set_category"]
                                 });
 
                             }

@@ -9,8 +9,9 @@ let WorkoutId = null;
 document.addEventListener("DOMContentLoaded", function () {
 
     // Load all the saved data from localstorage 
-    const localStorageData = localStorage.getItem("setComplete");
-    console.log(localStorageData);
+    //const localStorageData = localStorage.getItem("setComplete");
+    //console.log("Local data: " + localStorageData);
+
 
     timer = true;
     stopWatch();
@@ -35,20 +36,54 @@ document.addEventListener("DOMContentLoaded", function () {
             //}
 
             WorkoutId = activeWorkoutObj[0].WorkoutId;
-            console.log(activeWorkoutObj);
+            //console.log(activeWorkoutObj);
 
-            console.log("Workout ID: " + WorkoutId);
+            //console.log("Workout ID: " + WorkoutId);
 
             // If the first API lookup does not return a valid WorkoutId, the second API lookup which pulls the users active workout does not initiate.
             if (WorkoutId != null) {
                 loadActiveWorkoutExercises(activeWorkoutObj);
+
             }
         })
         .catch(error => {
             console.log('Error occurred:', error);
         });
+
+
        
 });
+
+
+//window.addEventListener("load", (event) => {
+//    // I need to do an if an item exists in setComplete
+//    // Then parse it as json
+//    // Then assign the values to the array
+//    // Then for loop through each ID and apply the correct css class
+
+
+//    // Checks if the set id tracking array is empty. If empty, skips writing the local storage data to it. Otherwise persistency between refreshes would not work.
+//    console.log("Page is fully loaded");
+    
+//    let retrieveStorage = localStorage.getItem("setComplete");
+//    let readJson = JSON.parse(retrieveStorage);
+//    console.log(readJson);
+//    let convertJsonToInt = readJson.map(item => Number(item));
+//    console.log(convertJsonToInt);
+//    setCompleteArray = convertJsonToInt;
+//    console.log('Final array: ' + setCompleteArray);
+
+    
+//    setCompleteArray.forEach(dataSetId => {
+//        console.log(dataSetId);
+//        console.log(`Searching for setid='${dataSetId}'`);
+//        //getRow = document.querySelector("#" + id);
+//        let getRow = document.querySelector(`[data-setid='${dataSetId}']`);
+//        console.log(getRow);
+//        getRow.classList.toggle("setComplete");
+//    });
+
+//})
 
 //if (WorkoutId != null) {
 //    fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
@@ -163,7 +198,7 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
             // Dictates the list of columns to be displayed on the page
             const columnNames = ["SetsCount", "WeightPerSet", "RepsPerSet", "SetCategoryArray"];
             let activeWorkoutObj = JSON.parse(data);
-
+            //console.log(activeWorkoutObj);
 
             let activeWorkoutContainer = document.querySelector("#activeWorkoutContainer");
             let generateTable = document.createElement("table");
@@ -171,66 +206,68 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
             activeWorkoutContainer.appendChild(generateTable);
 
 
+            // Track the WorkoutExerciseIds we've already processed
+            let processedWorkoutExerciseIds = new Set();
+
             // Iterate through each item in activeWorkoutObj
             activeWorkoutObj.forEach(workout => {
-                // Create a new "header" row for each workout entry which displays the number of sets and name of exercise. This is used for collapsing/expanding an exercise and its related sets
-                let newRowHead = generateTable.insertRow();
-                newRowHead.className = "headerRow";
-                newRowHead.setAttribute("headerworkoutexerciseid", workout["WorkoutExerciseId"]);
-                newRowHead.addEventListener("click", collapseExerciseSets);
+                //console.log(workout);
 
-                //newRowHead.setAttribute("id", "headerRow");
+                // Only create a header row if we haven't processed this WorkoutExerciseId before
+                if (!processedWorkoutExerciseIds.has(workout["WorkoutExerciseId"])) {
+                    // Mark this WorkoutExerciseId as processed
+                    processedWorkoutExerciseIds.add(workout["WorkoutExerciseId"]);
 
+                    // Create a new "header" row for each unique WorkoutExerciseId
+                    let newRowHead = generateTable.insertRow();
+                    newRowHead.className = "headerRow";
+                    newRowHead.setAttribute("headerworkoutexerciseid", workout["WorkoutExerciseId"]);
+                    newRowHead.addEventListener("click", collapseExerciseSets);
 
-                let newCellHeadSetsCount = newRowHead.insertCell();
-                let newCellHeadExerciseName = newRowHead.insertCell();            
+                    let newCellHeadSetsCount = newRowHead.insertCell();
+                    let newCellHeadExerciseName = newRowHead.insertCell();
 
-                let cellExerciseName = workout["ExerciseName"];
-                let cellNoOfSetsValue = workout["SetsCount"];
+                    let cellExerciseName = workout["ExerciseName"];
+                    let cellNoOfSetsValue = workout["SetsCount"];
 
-                let textNodeExerciseName = document.createTextNode(cellExerciseName);
-                let textNodeSets = document.createTextNode(cellNoOfSetsValue);
-                
-                newCellHeadSetsCount.appendChild(textNodeSets);
-                newCellHeadExerciseName.appendChild(textNodeExerciseName);                
-                
-                // Iterate through the workout object exercises based on the amount of sets in the exercise
-                for (let i = 0; i < workout.SetsCount; i++) {
-                    //console.log(workout["WeightPerSet"][i]);
+                    let textNodeExerciseName = document.createTextNode(cellExerciseName);
+                    let textNodeSets = document.createTextNode(cellNoOfSetsValue);
 
-                    let newRow = generateTable.insertRow();
-                    // Appends the ID of the exercise (essentially a unique ID referencing this ID + set_id) so a workout can have two of same exercises with unique sets.
-                    newRow.setAttribute("workoutexerciseid", workout["WorkoutExerciseId"]);
-
-                    
-
-                    let weightPerSet = workout["WeightPerSet"][i];
-                    let repsPerSet = workout["RepsPerSet"][i];
-                    let setCategory = workout["SetCategoryArray"][i];
-
-
-                    // Insert cells for each data point
-                    let weightCell = newRow.insertCell();
-                    let repsCell = newRow.insertCell();
-                    let categoryCell = newRow.insertCell();
-
-                    categoryCell.appendChild(document.createTextNode(setCategory));
-
-                    weightCell.appendChild(document.createTextNode(weightPerSet));
-                    weightCell.setAttribute("contenteditable", "true");
-
-                    repsCell.appendChild(document.createTextNode(repsPerSet));
-                    repsCell.setAttribute("contenteditable", "true");
-
-                    // Generates the button which marks a set as complete
-                    let setButton = document.createElement("button");
-                    setButton.setAttribute("class", "setButton");
-                    // Utilises adding/removing a css class to add/remove the toggle in the frontend
-                    setButton.addEventListener("click", setButtonClicked);
-                    newRow.appendChild(setButton);
+                    newCellHeadSetsCount.appendChild(textNodeSets);
+                    newCellHeadExerciseName.appendChild(textNodeExerciseName);
                 }
 
+                // Create a new row for each set of the workout
+                let newRow = generateTable.insertRow();
+                newRow.setAttribute("workoutexerciseid", workout["WorkoutExerciseId"]);
+                newRow.setAttribute("data-setid", workout["SetId"])
+                let weightPerSet = workout["Weight"];
+                let repsPerSet = workout["Reps"];
+                let setCategory = workout["SetCategory"];
+
+                // Insert cells for each data point
+                let weightCell = newRow.insertCell();
+                let repsCell = newRow.insertCell();
+                let categoryCell = newRow.insertCell();
+
+                categoryCell.appendChild(document.createTextNode(setCategory));
+                weightCell.appendChild(document.createTextNode(weightPerSet));
+                weightCell.setAttribute("contenteditable", "true");
+
+                repsCell.appendChild(document.createTextNode(repsPerSet));
+                repsCell.setAttribute("contenteditable", "true");
+
+                // Generate the button which marks a set as complete
+                let setButton = document.createElement("button");
+                setButton.setAttribute("class", "setButton");
+                setButton.addEventListener("click", setButtonClicked);
+                newRow.appendChild(setButton);
+
             });
+        })
+        // Loads from local storage the sets the user has marked as completed. This must be done here at the end of the promise chain, or else returns null elements in query selector.
+        .then(loadCompletedSets => {
+            loadLocalStorage();
         })
         .catch(error => {
             console.log('Error occurred:', error);
@@ -336,13 +373,6 @@ span.onclick = function () {
 };
 
 function collapseExerciseSets(event) {
-    // Prevent the default action, if necessary, to avoid unwanted behavior.
-    //event.preventDefault();
-
-    // `this` refers to the element that was clicked, i.e., the one with the onclick event.
-    // To get the parent element of this clicked element, you can use `this.parentElement`.
-    // However, if you are targeting children of this element itself, you can just use `this`.
-
     // The parent element of the row clicked
     let parentElement = this; 
     let workoutExerciseId = this.getAttribute("headerworkoutexerciseid");
@@ -351,9 +381,11 @@ function collapseExerciseSets(event) {
     console.log(matchingRows);
 
     // Toggle the display of each matching row
+    // There is a bug that needs fixinghere. It takes two clicks to shrink a row header because it first has to apply display = table-row. 
     matchingRows.forEach(row => {
         if (row.style.display === "none" || row.style.display === "") {
-            row.style.display = "table-row"; // Use the appropriate display type for your table
+            // sets the rows display back to a regular table row
+            row.style.display = "table-row"; 
         } else {
             row.style.display = "none";
         };
@@ -399,26 +431,79 @@ function addTimeToTimer() {
 
 }
 
-
+let setCompleteArray = [];
 function setButtonClicked(e) {
-    setCompleteArray = [];
+    /*console.log(localStorage.getItem("setComplete"));*/
     let parentElem = this.parentElement;
-    
-    console.log(parentElem);
+    let setId = parentElem.getAttribute("data-setid");
+
+    console.log(setId);
 
     startTimer();
 
+    //// Checks if the set id tracking array is empty. If empty, skips writing the local storage data to it. Otherwise persistency between refreshes would not work.
+    //if (setCompleteArray.length > 0) {
+    //    console.log("if ran");
+    //    let retrieveStorage = localStorage.getItem("setComplete");
+    //    let readJson = JSON.parse(retrieveStorage);
+    //    //console.log(readJson);
+    //    setCompleteArray = readJson;
+
+    //    setCompleteArray.forEach(dataSetId => {
+    //        //getRow = document.querySelector("#" + id);
+    //        let getRow = document.querySelector(`[setid='${dataSetId}']`);
+    //        getRow.classList.toggle("setComplete");
+    //    })
+    //};
+    
+
     if (parentElem.classList.contains("setComplete")) {
         parentElem.classList.remove("setComplete");
-        setCompleteArray.splice(setCompleteArray.indexOf(parentElem), 1);
+        // Remove the set ID from the global array based on the items index
+        setCompleteArray.splice(setCompleteArray.indexOf(setId), 1);
+
+        let stringifieSetIdsArray = JSON.stringify(setCompleteArray);
+        localStorage.setItem("setComplete", stringifieSetIdsArray);
     } else {
         parentElem.classList.toggle("setComplete");
-        setCompleteArray.push(parentElem);
-        //localStorage.setItem("setComplete", parentElem);
+        setCompleteArray.push(setId);
+
+        let stringifieSetIdsArray = JSON.stringify(setCompleteArray);
+        localStorage.setItem("setComplete", stringifieSetIdsArray);
     }
 
+    function stringifyForLocalStorage() {
+
+    }
     console.log(setCompleteArray)
     
 }
 
-/*console.log(localStorage.getItem("setComplete"));*/
+function loadLocalStorage() {
+    // I need to do an if an item exists in setComplete
+    // Then parse it as json
+    // Then assign the values to the array
+    // Then for loop through each ID and apply the correct css class
+
+
+    // Checks if the set id tracking array is empty. If empty, skips writing the local storage data to it. Otherwise persistency between refreshes would not work.
+    console.log("Page is fully loaded");
+
+    let retrieveStorage = localStorage.getItem("setComplete");
+    let readJson = JSON.parse(retrieveStorage);
+    console.log(readJson);
+    let convertJsonToInt = readJson.map(item => Number(item));
+    console.log(convertJsonToInt);
+    setCompleteArray = convertJsonToInt;
+    console.log('Final array: ' + setCompleteArray);
+
+
+    setCompleteArray.forEach(dataSetId => {
+        console.log(dataSetId);
+        console.log(`Searching for setid='${dataSetId}'`);
+        //getRow = document.querySelector("#" + id);
+        let getRow = document.querySelector(`[data-setid='${dataSetId}']`);
+        console.log(getRow);
+        getRow.classList.toggle("setComplete");
+    });
+}
