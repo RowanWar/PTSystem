@@ -148,5 +148,17 @@ namespace PTManagementSystem.Controllers
             //return View("CreateWorkout", exerciseList);
         }
 
+        //public IActionResult RemoveExerciseFromActiveWorkout(int WorkoutExerciseId)
+        //{
+        //    // code
+        //}
+
+        //public IActionResult RemoveSetFromActiveWorkout(int SetId)
+        //{
+        //    WorkoutDAO workoutDAO = new WorkoutDAO();
+
+            
+        //}
+
     }
 }
