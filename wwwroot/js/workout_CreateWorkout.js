@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let activeWorkoutObj = JSON.parse(data);
                 WorkoutId = activeWorkoutObj[0].WorkoutId;
 
-
+                localStorage.setItem("workoutId", WorkoutId);
                 // If the first API lookup does not return a valid WorkoutId, the second API lookup which pulls the users active workout does not initiate.
                 if (WorkoutId != null) {
                     queryActiveWorkoutExercises(activeWorkoutObj);
@@ -37,6 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Cached workout found.")
         let cachedWorkout = localStorage.getItem("cachedWorkout");
         let parsedCachedWorkout = JSON.parse(cachedWorkout);
+
+        //let cachedWorkoutId = localStorage.getItem("workoutId");
+        //let parsedCachedWorkoutId = JSON.parse(cachedWorkoutId);
+
         loadActiveWorkoutExercises(parsedCachedWorkout);
     }
 });
@@ -101,12 +105,12 @@ let span = document.querySelector(".close");
 
 
 function submitExercises() {
-    
+    let cachedWorkoutId = localStorage.getItem("workoutId");
+    let WorkoutId = JSON.parse(cachedWorkoutId);
     console.log(WorkoutId);
-    console.log(selectedExerciseIds);
-
     //Converts the GLOBAL string array (required to be used by .push and .splice in activeRows()) to an integer so it can be parsed correctly by the backend, which only accepts <int> data type.
     let ExerciseIdsIntArray = selectedExerciseIds.map(item => Number(item));
+/*    let WorkoutId = 201;*/
     console.log(ExerciseIdsIntArray);
     fetch('/Workout/InsertExercises', {
         method: "POST",
@@ -149,6 +153,13 @@ function handleSetDataLocalStorage() {
     localStorage.setItem(tdData[0]+"="+setId, tdContent);
 }
 
+function addSetButtonClicked() {
+    let elementClicked = this;
+    let parentElement = this.parentElement;
+
+    console.log(parentElement);
+}
+
 
 function loadActiveWorkoutExercises(activeWorkoutObj) {
     let activeWorkoutContainer = document.querySelector("#activeWorkoutContainer");
@@ -166,7 +177,7 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
     activeWorkoutObj.forEach(workout => {
         //console.log(workout);
 
-        // Only create a header row if we haven't processed this WorkoutExerciseId before
+        // Only create a header row if one does not already currently exist for this WorkoutExerciseId (1 header only per exercise)
         if (!processedWorkoutExerciseIds.has(workout["WorkoutExerciseId"])) {
             // Mark this WorkoutExerciseId as processed
             processedWorkoutExerciseIds.add(workout["WorkoutExerciseId"]);
@@ -188,6 +199,12 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
 
             newCellHeadSetsCount.appendChild(textNodeSets);
             newCellHeadExerciseName.appendChild(textNodeExerciseName);
+
+            // Generate the button which marks a set as complete
+            let addSetButton = document.createElement("button");
+            addSetButton.setAttribute("class", "setButton");
+            addSetButton.addEventListener("click", addSetButtonClicked);
+            newRowHead.appendChild(addSetButton);
         }
 
         // Create a new row for each set of the workout

@@ -84,7 +84,8 @@ namespace PTManagementSystem.Controllers
             return Json(setIdsArr);
         }
 
-        //public async Task<IActionResult> InsertSets([FromBody] JsonElement data)
+        //Build this next
+        //public async Task<IActionResult> Inse1rtSets([FromBody] JsonElement data)
         //{
 
         //    //int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
