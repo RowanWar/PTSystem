@@ -77,27 +77,40 @@ namespace PTManagementSystem.Controllers
             List<int> setIdsArr = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
 
             // Adds a default empty set to every exercise created by the user for display purposes.
-            int result = await exercise.AddSetsToDatabase(setIdsArr);
-            System.Diagnostics.Debug.WriteLine(setIdsArr);
-            //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+            int result = await exercise.AddSetToDatabase(setIdsArr);
+          
 
             return Json(setIdsArr);
         }
 
-        //Build this next
-        //public async Task<IActionResult> Inse1rtSets([FromBody] JsonElement data)
-        //{
+        // Called when the user clicks the "add set" button in the active workout.
+        public async Task<IActionResult> InsertSets(int WorkoutExerciseId)
+        {
 
-        //    //int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
-        //    List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("WorkoutExerciseId").ToString());
-        //    WorkoutDAO sets = new WorkoutDAO();
-        //    List<int> result = await sets.AddSetsToDatabase(WorkoutExerciseId);
+            // Converts the single ID passed to the function into an array of type integer so we can re-use the function already built in workoutDAO. 
+            // Creates a new int list and adds the parameter ID to it, then passes it to the DAO function.
+            List<int> WorkoutExerciseIdArr = new List<int> { WorkoutExerciseId };
+            WorkoutDAO sets = new WorkoutDAO();
 
-        //    System.Diagnostics.Debug.WriteLine(result);
-        //    //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
+            int result = await sets.AddSetToDatabase(WorkoutExerciseIdArr);
 
-        //    return Json(result);
-        //}
+
+            return Json(result);
+        }
+
+        public async Task<IActionResult> RemoveSets(int SetIds)
+        {
+
+            // Converts the single ID passed to the function into an array of type integer so we can re-use the function already built in workoutDAO. 
+            // Creates a new int list and adds the parameter ID to it, then passes it to the DAO function.
+            List<int> SetIdsArr = new List<int> { SetIds };
+            //WorkoutDAO sets = new WorkoutDAO();
+            WorkoutDAO workoutDAO = new WorkoutDAO();
+
+            int result = await workoutDAO.RemoveSetsFromDatabase(SetIdsArr);
+
+            return Json(result);
+        }
 
 
         public IActionResult SubmitExercises(int UserId)
@@ -152,13 +165,6 @@ namespace PTManagementSystem.Controllers
         //public IActionResult RemoveExerciseFromActiveWorkout(int WorkoutExerciseId)
         //{
         //    // code
-        //}
-
-        //public IActionResult RemoveSetFromActiveWorkout(int SetId)
-        //{
-        //    WorkoutDAO workoutDAO = new WorkoutDAO();
-
-            
         //}
 
     }

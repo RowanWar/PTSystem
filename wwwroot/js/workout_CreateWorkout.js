@@ -157,7 +157,20 @@ function addSetButtonClicked() {
     let elementClicked = this;
     let parentElement = this.parentElement;
 
+    // Grabs the exercise id and stores in a variable 
+    let WorkoutExerciseId = parentElement.getAttribute("headerworkoutexerciseid")
     console.log(parentElement);
+
+    // Deletes the cached workout so the new set can be reflected on the page for the user.
+    localStorage.removeItem("cachedWorkout");
+    fetch('/Workout/InsertSets?WorkoutExerciseId=' + WorkoutExerciseId)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log('Error occurred:', error);
+        });
 }
 
 
@@ -462,16 +475,22 @@ function deleteButtonClicked() {
 
     parentElem.remove();
 
+    //// Deletes the cached workout so the new set can be reflected on the page for the user.
+    //localStorage.removeItem("cachedWorkout");
+    fetch('/Workout/RemoveSets?SetIds=' + clickedSetId)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log('Error occurred:', error);
+        });
 
     // Retrieve the cachedWorkout array from localStorage
     let cachedWorkout = JSON.parse(localStorage.getItem('cachedWorkout')) || [];
-    console.log('Original cachedWorkout:', cachedWorkout);
 
     // Filter out the array object that matches the clicked setId AKA remove the row associated with the exercise
     cachedWorkout = cachedWorkout.filter(item => item.SetId != clickedSetId);
-
-
-    console.log('Updated cachedWorkout:', cachedWorkout);
 
     // Save the updated array back to localStorage
     localStorage.setItem('cachedWorkout', JSON.stringify(cachedWorkout));

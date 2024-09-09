@@ -447,12 +447,14 @@ namespace PTManagementSystem.Services
 
 
 
-        public async Task<int> AddSetsToDatabase(List<int> WorkoutExerciseIds)
+        public async Task<int> AddSetToDatabase(List<int> WorkoutExerciseIds)
         {
             List<WorkoutExercisesModel> workoutSets = new List<WorkoutExercisesModel>();
             //List<int> WorkoutExerciseIds = new List<int>();
             //string sqlStatement = "insert into workout_exercise (workout_exercise_id, workout_id, exercise_id, notes, created_at) values (DEFAULT, @WorkoutId, @ExerciseId, 'This has been added manually', '10/11/2022 17:50:18+0000')";
             int result = 0;
+
+
 
             // Opens an async db connection to allow for efficient insertions/reads in the database
             await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
@@ -556,8 +558,6 @@ namespace PTManagementSystem.Services
             }
 
         }
-
-
 
 
 
@@ -768,5 +768,52 @@ namespace PTManagementSystem.Services
             }
 
         }
+
+
+
+        // Takes an integer array of sets and removes them based on their set_id via a batch command
+        public async Task<int> RemoveSetsFromDatabase(List<int> SetIds)
+        {
+            //List<WorkoutExercisesModel> workoutSets = new List<WorkoutExercisesModel>();
+            int result = 0;
+
+
+
+            // Opens an async db connection to allow for efficient insertions/reads in the database
+            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var connection = await dataSource.OpenConnectionAsync();
+
+
+            using var batch = new NpgsqlBatch(connection);
+
+            foreach (var SetId in SetIds)
+            {
+                batch.BatchCommands.Add(new NpgsqlBatchCommand(
+                    "DELETE FROM set WHERE set_id = @SetId")
+                {
+                    Parameters =
+                {
+                    new NpgsqlParameter("@SetId", SetId),
+                }
+
+                });
+            }
+
+            try
+            {
+                result = await batch.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+
+
+            return result;
+
+        }
     }
+
 }
