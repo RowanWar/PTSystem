@@ -6,6 +6,8 @@ let count = 00;
 const UserId = 1;
 let WorkoutId = null;
 
+
+// This needs to be made an individual function, and then simply called when content loaded. This seperated function can then be called AFTER the cachedWorkout is deleted upon a new set being created.
 document.addEventListener("DOMContentLoaded", function () {
 
     timer = true;
@@ -14,23 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Checks if the users workout is already cached in localstorage. If key does not exist, returns null and does not initiate the query.
     if (localStorage.getItem("cachedWorkout") == null) {
         console.log('No cached workout found, fetching from database now...');
-    
-        fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
-            .then(response => response.json())
-            .then(data => {
-                let activeWorkoutObj = JSON.parse(data);
-                WorkoutId = activeWorkoutObj[0].WorkoutId;
+        CheckForActiveWorkout();
 
-                localStorage.setItem("workoutId", WorkoutId);
-                // If the first API lookup does not return a valid WorkoutId, the second API lookup which pulls the users active workout does not initiate.
-                if (WorkoutId != null) {
-                    queryActiveWorkoutExercises(activeWorkoutObj);
-
-                }
-            })
-            .catch(error => {
-                console.log('Error occurred:', error);
-            });  
     }
 
     else {
@@ -103,6 +90,24 @@ let btn = document.querySelector("#addExerciseBtn");
 let span = document.querySelector(".close");
 
 
+function CheckForActiveWorkout() {
+    fetch('/Workout/CheckForActiveWorkout?UserId=' + UserId)
+        .then(response => response.json())
+        .then(data => {
+            let activeWorkoutObj = JSON.parse(data);
+            WorkoutId = activeWorkoutObj[0].WorkoutId;
+
+            localStorage.setItem("workoutId", WorkoutId);
+            // If the first API lookup does not return a valid WorkoutId, the second API lookup which pulls the users active workout does not initiate.
+            if (WorkoutId != null) {
+                queryActiveWorkoutExercises();
+
+            }
+        })
+        .catch(error => {
+            console.log('Error occurred:', error);
+        });
+}
 
 function submitExercises() {
     let cachedWorkoutId = localStorage.getItem("workoutId");
@@ -140,13 +145,14 @@ function handleSetDataLocalStorage() {
     console.log('Fired handleSetDataLocalStorage()');
 
     let parentElem = this.parentElement;
-    let setId = parentElem.getAttribute("data-setid");
 
-    weightId = this.getAttribute("data-weight-setid")
-    repsId = this.getAttribute("data-reps-setid")
+    let setId = parentElem.getAttribute("data-setid");
+    let weightId = this.getAttribute("data-weight-setid")
+    let repsId = this.getAttribute("data-reps-setid")
 
     // Grabs all IDs/classes from the selected (this context) table cell
     tdData = this.getAttributeNames();
+    console.log(tdData);
     tdContent = this.textContent;
 
     // Stores the data in localstorage. The first index of the tdData array will always be the name of cell used to invoke this function. Concats the setId to serve as a unique key for localstorage
@@ -167,6 +173,10 @@ function addSetButtonClicked() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            //queryActiveWorkoutExercises();
+            //localStorage.removeItem("cachedWorkout");
+            //console.log("Before querying...");
+            //queryActiveWorkoutExercises();
         })
         .catch(error => {
             console.log('Error occurred:', error);
@@ -259,12 +269,16 @@ function loadActiveWorkoutExercises(activeWorkoutObj) {
         let deleteSetButton = document.createElement("button");
         deleteSetButton.setAttribute("class", "deleteSetButton");
         deleteSetButton.addEventListener("click", deleteButtonClicked);
+        deleteSetButton.appendChild(document.createTextNode("Del Set"));
         newRow.appendChild(deleteSetButton);
 
-        loadLocalStorage();
+
+        
     });
+    // Needs to run outside the above for loop or else it will run wayyy too many times. Loads from localstorage the sets marked as completed after elements have been generated
+    loadLocalStorage();
 }
-function queryActiveWorkoutExercises(activeWorkoutObj) {
+function queryActiveWorkoutExercises() {
     fetch('/Workout/ViewActiveWorkoutByUserId?UserId=' + UserId)
         .then(response => response.json())
         .then(data => {
@@ -504,30 +518,43 @@ function loadLocalStorage() {
     let retrieveStorage = localStorage.getItem("setComplete");
     if (retrieveStorage != null) {
         let readJson = JSON.parse(retrieveStorage);
-        console.log(readJson);
+        //console.log(readJson);
         let convertJsonToInt = readJson.map(item => Number(item));
-        console.log(convertJsonToInt);
+        //console.log(convertJsonToInt);
         setCompleteArray = convertJsonToInt;
         //console.log('Final array: ' + setCompleteArray);
 
 
         setCompleteArray.forEach(dataSetId => {
             //console.log(`Searching for setid='${dataSetId}'`);
+
             let getRow = document.querySelector(`[data-setid='${dataSetId}']`);
-            getRow.classList.toggle("setComplete");
+            //console.log(getRow);
+            if (getRow != null) {
+                getRow.classList.toggle("setComplete");
+            }
         });
     }
     
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('data-reps-setid'));
-    const keyValuePairs = keys.map(key => {
+    const weightKey = Object.keys(localStorage).filter(key => key.startsWith('data-weight-setid'));
+    const repKey = Object.keys(localStorage).filter(key => key.startsWith('data-reps-setid'));
+
+    const weightKeyValuePairs = weightKey.map(weightKey => {
         return {
-            key: key,
-            value: JSON.parse(localStorage.getItem(key))
+            key: weightKey,
+            value: JSON.parse(localStorage.getItem(weightKey))
+        };
+    });
+
+    const setKeyValuePairs = repKey.map(setKey => {
+        return {
+            key: setKey,
+            value: JSON.parse(localStorage.getItem(setKey))
         };
     });
 
     // Unpacks the item from local storage based on key/value, splits the string to properly surround it in quote as a string, then finds the element based on its custom data attribute (id)
-    keyValuePairs.forEach(pair => {
+    weightKeyValuePairs.forEach(pair => {
         let key = pair.key;
         let value = pair.value;
             let [attributeName, attrValue] = key.split("=");
@@ -535,14 +562,28 @@ function loadLocalStorage() {
             let getTd = document.querySelector(selector);
 
         if (getTd) {
-            //console.log("found: " + getTd);
-            //console.log(getTd.children());
-            //getTd.appendChild(document.createTextNode(value));
             getTd.textContent = value;
         }
         else {
             console.log("Did not find an element: " + getTd);
         }
-        })
+
+    })
+
+    setKeyValuePairs.forEach(pair => {
+        let key = pair.key;
+        let value = pair.value;
+        let [attributeName, attrValue] = key.split("=");
+        let selector = `[${attributeName}="${attrValue}"]`;
+        let getTd = document.querySelector(selector);
+
+        if (getTd) {
+            getTd.textContent = value;
+        }
+        else {
+            console.log("Did not find an element: " + getTd);
+        }
+
+    })
 
 }
