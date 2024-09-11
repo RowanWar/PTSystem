@@ -512,6 +512,58 @@ function deleteButtonClicked() {
 }
 
 
+function submitButtonClicked() {
+    //let setsCompleted = localStorage.getItem("setComplete");
+    //console.log(setsCompleted);
+
+    let retrieveStorage = localStorage.getItem("setComplete");
+    if (retrieveStorage != null) {
+        let readJson = JSON.parse(retrieveStorage);
+        //console.log(readJson);
+        let convertJsonToInt = readJson.map(item => Number(item));
+        //console.log(convertJsonToInt);
+        setCompleteArray = convertJsonToInt;
+        //console.log('Final array: ' + setCompleteArray);
+
+
+        // Iterates through each set marked as completed and unpacks their values i.e. set weight/reps associated with the specific SetId
+        setCompleteArray.forEach(dataSetId => {
+
+            let getRow = document.querySelector(`[data-setid='${dataSetId}']`);
+
+
+            if (getRow != null) {
+
+                // Saves a HTML collection object of the children within each row marked as completed in setCompleteArray
+                let childNodes = getRow.children;
+
+                // Grabs the content of the weight table cell
+                console.log(childNodes[0].textContent);
+                console.log(childNodes[1].textContent);
+
+            }
+        });
+    }
+
+    const weightKey = Object.keys(localStorage).filter(key => key.startsWith('data-weight-setid'));
+    const repKey = Object.keys(localStorage).filter(key => key.startsWith('data-reps-setid'));
+
+    const weightKeyValuePairs = weightKey.map(weightKey => {
+        return {
+            key: weightKey,
+            value: JSON.parse(localStorage.getItem(weightKey))
+        };
+    });
+
+    const setKeyValuePairs = repKey.map(setKey => {
+        return {
+            key: setKey,
+            value: JSON.parse(localStorage.getItem(setKey))
+        };
+    });
+}
+
+
 function loadLocalStorage() {
     // Checks if the set id tracking array is empty. If empty, skips writing the local storage data to it. Otherwise persistency between refreshes would not work.
 

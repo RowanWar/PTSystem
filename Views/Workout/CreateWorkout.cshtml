@@ -52,6 +52,7 @@
 </div>
 
 <button id="addExerciseBtn" onClick="addExerciseBtnClicked()">Add an exercise</button>
+<button id="submitWorkoutBtn" onClick="submitButtonClicked()">Submit workout</button>
 
 <div>
     <a asp-action="Index">Back to List</a>
@@ -73,8 +74,8 @@
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
-        @* Placeholder div for loading the images into it when user clicks "View Images" *@
+
+        @* Placeholder div for loading the content into it *@
         <div class="dynamic-content">
         </div>
     </div>
