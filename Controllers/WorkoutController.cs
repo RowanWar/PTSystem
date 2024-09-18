@@ -5,7 +5,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Identity.Client;
 using PTManagementSystem.Models;
 using PTManagementSystem.Services;
-using System.Text.Json; // Might be redundant
+using System.Text.Json;
+using System.Text.Json.Nodes; // Might be redundant
 
 
 namespace PTManagementSystem.Controllers
@@ -14,10 +15,9 @@ namespace PTManagementSystem.Controllers
     public class WorkoutController : Controller
     {
         // Create a list out of the workout model so the forEach in the .cshtml can iterate through all the workouts properly.
-        static List<WorkoutModel> workouts = new List<WorkoutModel>();
+        static List<WorkoutExerciseModel> workouts = new List<WorkoutExerciseModel>();
         public IActionResult Index()
         {
-            // What does this line do? 
             WorkoutDAO workout = new WorkoutDAO();
 
 
@@ -71,7 +71,6 @@ namespace PTManagementSystem.Controllers
         {
 
             int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
-            //List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").GetRawText());
             List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").ToString());
             WorkoutDAO exercise = new WorkoutDAO();
             List<int> setIdsArr = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
@@ -122,6 +121,29 @@ namespace PTManagementSystem.Controllers
 
             return Json(resultSerialized);
         }
+
+
+
+
+        // API endpoint for when the user clicks to submit/finish a workout
+        public async Task<IActionResult> SubmitWorkout(int UserId, [FromBody] JsonElement WorkoutData)
+        {
+            WorkoutDAO workout = new WorkoutDAO();
+
+            int result = await workout.FinishUsersActiveWorkout(WorkoutData);
+
+            // If the submitted object has no sets completed, return a message to the user stating such and exit early.
+            if (result == 0)
+            {
+                return Json("ERROR: No sets were submitted for this workout!");
+            }
+
+            // Return a successful result.
+            return Json(result);
+        }
+
+
+
 
         //Responds to a fetch request, providing a list of exercises from within the "exercise" table in the db
         //Passes in the UserId within the query to also display any custom exercises created by that user in the db

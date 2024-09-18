@@ -526,6 +526,9 @@ function submitButtonClicked() {
         //console.log('Final array: ' + setCompleteArray);
 
 
+        /*var newObj = new Object();*/
+        let setsData = [];
+
         // Iterates through each set marked as completed and unpacks their values i.e. set weight/reps associated with the specific SetId
         setCompleteArray.forEach(dataSetId => {
 
@@ -533,16 +536,61 @@ function submitButtonClicked() {
 
 
             if (getRow != null) {
+                
+
+                setId = getRow.getAttribute("data-setid");
+                //console.log("Set ID: " + setId);
 
                 // Saves a HTML collection object of the children within each row marked as completed in setCompleteArray
                 let childNodes = getRow.children;
 
-                // Grabs the content of the weight table cell
-                console.log(childNodes[0].textContent);
-                console.log(childNodes[1].textContent);
+                
+                // Grabs the contents (number) of the weight & reps table cell within an exercise row
+                const setWeight = childNodes[0].textContent;
+                const setReps = childNodes[1].textContent;
+
+
+                var SetData = {
+                    setid: parseInt(setId),
+                    weight: parseFloat(setWeight),
+                    reps: parseInt(setReps)
+                }
+
+                //var newSetObj = {
+                //    setid: setId,
+                //    weight: childNodes[0].textContent,
+                //    reps: childNodes[1].textContent
+                //}
+
+                setsData.push(SetData);
+
+
+
 
             }
         });
+        console.log()
+        console.log("Data being sent:", JSON.stringify({
+            WorkoutData: setsData
+        }));
+
+        fetch('/Workout/SubmitWorkout?UserId=' + UserId, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    WorkoutData: setsData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.log('Error occurred:', error);
+            });
+
     }
 
     const weightKey = Object.keys(localStorage).filter(key => key.startsWith('data-weight-setid'));

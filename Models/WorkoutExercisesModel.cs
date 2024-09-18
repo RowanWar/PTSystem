@@ -27,7 +27,7 @@ namespace PTManagementSystem.Models
 
         public string? Notes { get; set; }
 
-        public Boolean WorkoutActive{ get; set; }
+        public Boolean WorkoutActive { get; set; }
 
         public string WorkoutName { get; set; }
 
@@ -48,12 +48,12 @@ namespace PTManagementSystem.Models
 
         public int Reps { get; set; }
 
-        public int RepsPerSet { get; set; }
+        //public int RepsPerSet { get; set; }
 
         public decimal Weight { get; set; }
 
         // Used to display an array of weight per set to the user in the front-end from CheckForActiveWeight() query.
-        public int WeightPerSet { get; set; }
+        //public int WeightPerSet { get; set; }
 
         public string SetCategory { get; set; }
 
@@ -65,4 +65,15 @@ namespace PTManagementSystem.Models
 
         //public IEnumerable<SelectListItem> SetCategoryList { get; set; }
     }
+
+    public class ReturnedSetsModel
+    {
+        [Key]
+        public int SetId { get; set; }
+
+        public decimal Weight { get; set; }
+
+        public int Reps { get; set; }
+    }
+
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml.Linq;
 using System.Numerics;
+using System.Text.Json;
 
 namespace PTManagementSystem.Services
 {
@@ -319,7 +320,91 @@ namespace PTManagementSystem.Services
 
 
 
-        public List<WorkoutExercisesModel> GetUsersActiveWorkout(int UserId)
+        public async Task<int> FinishUsersActiveWorkout(JsonElement WorkoutData)
+        {
+
+            // Check if WorkoutData contains the 'WorkoutData' property
+            if (!WorkoutData.TryGetProperty("WorkoutData", out var setsElement))
+            {
+                throw new ArgumentException("ERROR: Sets provided are null...");
+            }
+
+            // Deserialize the JSON array into a list for looping through / unpacking below
+            List<ReturnedSetsModel> workoutSets = JsonSerializer.Deserialize<List<ReturnedSetsModel>>(setsElement.GetRawText(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true // Handle case-insensitive property names
+                });
+
+            if (workoutSets == null || workoutSets.Count == 0)
+            {
+                return (0);
+            }
+
+
+
+            // Opens an async db connection to allow for efficient insertions/reads in the database
+            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var connection = await dataSource.OpenConnectionAsync();
+
+
+            using var batch = new NpgsqlBatch(connection);
+
+
+
+            // Loop through each set and process it (e.g., save to database)
+            foreach (var set in workoutSets)
+            {
+                // Example processing - print to console or handle it
+                System.Diagnostics.Debug.WriteLine($"Set ID: {set.SetId}, Weight: {set.Weight}, Reps: {set.Reps}");
+
+
+                batch.BatchCommands.Add(new NpgsqlBatchCommand(
+                    "UPDATE set " +
+                    "SET weight = @weight" +
+                    ", " +
+                    "reps = @reps " +
+                    "WHERE set_id = @set_id")
+
+                {
+                    Parameters =
+                {
+                    new NpgsqlParameter("@weight", set.Weight),
+                    new NpgsqlParameter("@reps", set.Reps),
+                    new NpgsqlParameter("@set_id", set.SetId)
+
+                }
+
+                });
+                
+            }
+
+
+            try
+            {
+                int result = await batch.ExecuteNonQueryAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+            
+            
+            //    "RETURNING workout_id";
+            //string sqlStatement = "UPDATE set" +
+            //    "SET weight = @weight" +
+            //    "SET reps = @reps" +
+            //    "WHERE set_id = @set_id";
+
+
+        }
+
+
+
+            public List<WorkoutExercisesModel> GetUsersActiveWorkout(int UserId)
         {
             List<WorkoutExercisesModel> foundWorkout = new List<WorkoutExercisesModel>();
 

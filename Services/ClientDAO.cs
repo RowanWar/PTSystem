@@ -84,7 +84,7 @@ namespace PTManagementSystem.Services
             throw new NotImplementedException();
         }
 
-        public List<WorkoutModel> SearchClients(string searchTerm)
+        public List<WorkoutExerciseModel> SearchClients(string searchTerm)
         {
             throw new NotImplementedException();
         }
