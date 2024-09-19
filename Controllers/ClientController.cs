@@ -7,6 +7,8 @@ namespace PTManagementSystem.Controllers
 {
     public class ClientController : Controller
     {
+
+        WorkoutDAO WorkoutDAO = new WorkoutDAO(null);
         // Create a list out of the client model so the forEach in the index.cshtml can iterate through all the clients properly.
         static List<ClientModel> clients = new List<ClientModel>();
         public IActionResult Index()
@@ -19,8 +21,7 @@ namespace PTManagementSystem.Controllers
         // Displays a list of all workouts performed by a specific user based upon their UserId in the DB.
         public IActionResult ClientWorkouts(int ClientUserId)
         {
-            WorkoutDAO workout = new WorkoutDAO();
-            List<WorkoutModel> workoutList = workout.GetAllWorkoutsByUserId(ClientUserId);
+            List<WorkoutModel> workoutList = WorkoutDAO.GetAllWorkoutsByUserId(ClientUserId);
 
             return View("ClientWorkout", workoutList);
         }
@@ -28,8 +29,7 @@ namespace PTManagementSystem.Controllers
         // Displays the workout details of a user based upon the WorkoutId provided
         public IActionResult WorkoutDetails(int WorkoutId)
         {
-            WorkoutDAO workout = new WorkoutDAO();
-            List<WorkoutExercisesModel> workoutDetails = workout.GetWorkoutDetailsByWorkoutId(WorkoutId);
+            List<WorkoutExercisesModel> workoutDetails = WorkoutDAO.GetWorkoutDetailsByWorkoutId(WorkoutId);
 
             //ViewBag.ModelData = workoutDetails;
 
@@ -39,8 +39,7 @@ namespace PTManagementSystem.Controllers
 
         public IActionResult WeeklyReport(int ClientUserId)
         {
-            WorkoutDAO report = new WorkoutDAO();
-            List<ClientWeeklyReportModel> weeklyReport = report.GetAllWeeklyReportsByUserId(ClientUserId);
+            List<ClientWeeklyReportModel> weeklyReport = WorkoutDAO.GetAllWeeklyReportsByUserId(ClientUserId);
 
             return View("ClientReport", weeklyReport);
         }
@@ -48,8 +47,7 @@ namespace PTManagementSystem.Controllers
         
         public IActionResult ViewImage(int ReportId)
         {
-            WorkoutDAO report = new WorkoutDAO();
-            List<ImageModel> weeklyReportImages = report.GetAllImagesByWeeklyReportId(ReportId);
+            List<ImageModel> weeklyReportImages = WorkoutDAO.GetAllImagesByWeeklyReportId(ReportId);
 
             string result = JsonSerializer.Serialize(weeklyReportImages);
 

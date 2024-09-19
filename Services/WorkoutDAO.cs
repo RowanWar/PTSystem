@@ -7,13 +7,29 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Xml.Linq;
 using System.Numerics;
 using System.Text.Json;
+using System.Configuration;
 
 namespace PTManagementSystem.Services
 {
-    public class WorkoutDAO : IWorkoutDataService
+    //This was nto commmented out
+    public class WorkoutDAO /*: IWorkoutDataService*/ 
     {
-        string dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
-        
+        //string _dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
+        private readonly string _dbConnectionString;
+
+        public WorkoutDAO(string dbConnectionString)
+        {
+            _dbConnectionString = dbConnectionString;
+
+        }
+        //string dataSource = NpgsqlDataSource.Create(_dbConnectionString);
+
+        //public class MovieSettings
+        //{
+        //    var moviesConfig =
+        //        Configuration.GetSection("ConnectionString").Get<ConnectionSetting>();
+        //    _connectionString = moviesConfig.PtSystemDb;
+        //}
 
 
         public List<WorkoutModel> GetAllWorkouts()
@@ -29,7 +45,7 @@ namespace PTManagementSystem.Services
                 string sqlStatement = "SELECT * FROM workout WHERE user_id = @UserId";
 
 
-                using (var connection = new NpgsqlConnection(dbConnectionString))
+                using (var connection = new NpgsqlConnection(_dbConnectionString))
                 {
                     try
                     {
@@ -118,7 +134,7 @@ namespace PTManagementSystem.Services
                                     ORDER BY e.exercise_name;";
 
 
-                using (var connection = new NpgsqlConnection(dbConnectionString))
+                using (var connection = new NpgsqlConnection(_dbConnectionString))
                 {
                     try
                     {
@@ -211,7 +227,7 @@ namespace PTManagementSystem.Services
 
             //string sqlStatement = "SELECT * FROM weekly_report WHERE date_deleted is null and user_id = @UserId";
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using (var connection = new NpgsqlConnection(_dbConnectionString))
             {
 
                 try
@@ -258,7 +274,7 @@ namespace PTManagementSystem.Services
                 string sqlStatement = "SELECT * FROM weekly_report WHERE date_deleted is null and user_id = @UserId";
 
 
-                using (var connection = new NpgsqlConnection(dbConnectionString))
+                using (var connection = new NpgsqlConnection(_dbConnectionString))
                 {
                     try
                     {
@@ -344,7 +360,7 @@ namespace PTManagementSystem.Services
 
 
             // Opens an async db connection to allow for efficient insertions/reads in the database
-            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var dataSource = NpgsqlDataSource.Create(_dbConnectionString);
             await using var connection = await dataSource.OpenConnectionAsync();
 
 
@@ -413,7 +429,7 @@ namespace PTManagementSystem.Services
                 "RETURNING workout_id";
 
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using (var connection = new NpgsqlConnection(_dbConnectionString))
             {
                 try
                 {
@@ -480,7 +496,7 @@ namespace PTManagementSystem.Services
             int result = 0;
 
             // Opens an async db connection to allow for efficient insertions/reads in the database
-            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var dataSource = NpgsqlDataSource.Create(_dbConnectionString);
             await using var connection = await dataSource.OpenConnectionAsync();
 
 
@@ -542,7 +558,7 @@ namespace PTManagementSystem.Services
 
 
             // Opens an async db connection to allow for efficient insertions/reads in the database
-            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var dataSource = NpgsqlDataSource.Create(_dbConnectionString);
             await using var connection = await dataSource.OpenConnectionAsync();
 
 
@@ -591,7 +607,7 @@ namespace PTManagementSystem.Services
             string sqlStatement = "SELECT * FROM workout WHERE user_id = @UserId AND workout_active = true LIMIT 1";
 
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using (var connection = new NpgsqlConnection(_dbConnectionString))
             {
                 try
                 {
@@ -684,7 +700,7 @@ namespace PTManagementSystem.Services
                                         s.workout_exercise_id,
 	                                    s.set_id;";
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using (var connection = new NpgsqlConnection(_dbConnectionString))
             {
                 try
                 {
@@ -750,7 +766,7 @@ namespace PTManagementSystem.Services
         //     int result = 0;
 
         //     // Opens an async db connection to allow for efficient insertions/reads in the database
-        //     await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+        //     await using var dataSource = NpgsqlDataSource.Create(_dbConnectionString);
         //     await using var connection = await dataSource.OpenConnectionAsync();
 
 
@@ -796,7 +812,7 @@ namespace PTManagementSystem.Services
             string sqlStatement = "SELECT * FROM exercise LIMIT 300";
 
 
-            using (var connection = new NpgsqlConnection(dbConnectionString))
+            using (var connection = new NpgsqlConnection(_dbConnectionString))
             {
                 try
                 {
@@ -865,7 +881,7 @@ namespace PTManagementSystem.Services
 
 
             // Opens an async db connection to allow for efficient insertions/reads in the database
-            await using var dataSource = NpgsqlDataSource.Create(dbConnectionString);
+            await using var dataSource = NpgsqlDataSource.Create(_dbConnectionString);
             await using var connection = await dataSource.OpenConnectionAsync();
 
 

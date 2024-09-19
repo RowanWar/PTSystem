@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+	
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -9,6 +9,7 @@
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
+	
   <ItemGroup>
     <Content Remove="wwwroot\js\workout_WorkoutDetails.js" />
   </ItemGroup>
@@ -26,6 +27,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     <PackageReference Include="npgsql" Version="8.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,3 +39,4 @@
   </ItemGroup>
 
 </Project>
+

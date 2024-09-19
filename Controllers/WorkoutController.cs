@@ -14,15 +14,30 @@ namespace PTManagementSystem.Controllers
 {
     public class WorkoutController : Controller
     {
+
+
+        // Why does this only work if I add this code in the controller? I don't understand why it wouldn't work just with the code in WorkoutDAO?
+        private readonly WorkoutDAO _workoutDAO;
+
+        public WorkoutController(WorkoutDAO workoutDAO)
+        {
+            _workoutDAO = workoutDAO;
+        }
+
+
+
+
         // Create a list out of the workout model so the forEach in the .cshtml can iterate through all the workouts properly.
         static List<WorkoutExerciseModel> workouts = new List<WorkoutExerciseModel>();
+
+        // How can I avoid passing null (it expects a parameter).
+        WorkoutDAO WorkoutDAO = new WorkoutDAO(null);
+
         public IActionResult Index()
         {
-            WorkoutDAO workout = new WorkoutDAO();
-
 
             // Currently hard coded to use a user ID here. 
-            return View(workout.GetAllWorkoutsByUserId(9));
+            return View(WorkoutDAO.GetAllWorkoutsByUserId(9));
         }
 
         public IActionResult CreateWorkout()
@@ -34,20 +49,11 @@ namespace PTManagementSystem.Controllers
 
         public IActionResult ViewActiveWorkoutByUserId(int UserId)
         {
-            WorkoutDAO workout = new WorkoutDAO();
-            //List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
-
-
-            System.Diagnostics.Debug.WriteLine("If statement has run");
-
-            List<WorkoutExercisesModel> viewActiveWorkout = workout.ViewActiveWorkoutByUserId(UserId);
+            List<WorkoutExercisesModel> viewActiveWorkout = WorkoutDAO.ViewActiveWorkoutByUserId(UserId);
             string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
 
+
             return Json(HasActiveWorkoutSerialized);
-
-            //string resultSerialized = JsonSerializer.Serialize(activeWorkout);
-
-            //return Json(resultSerialized);
         }
 
 
@@ -72,11 +78,10 @@ namespace PTManagementSystem.Controllers
 
             int WorkoutId = data.GetProperty("WorkoutId").GetInt32();
             List<int> ExerciseIds = JsonSerializer.Deserialize<List<int>>(data.GetProperty("ExerciseIds").ToString());
-            WorkoutDAO exercise = new WorkoutDAO();
-            List<int> setIdsArr = await exercise.AddExercisesToDatabase(WorkoutId, ExerciseIds);
+            List<int> setIdsArr = await WorkoutDAO.AddExercisesToDatabase(WorkoutId, ExerciseIds);
 
             // Adds a default empty set to every exercise created by the user for display purposes.
-            int result = await exercise.AddSetToDatabase(setIdsArr);
+            int result = await WorkoutDAO.AddSetToDatabase(setIdsArr);
           
 
             return Json(setIdsArr);
@@ -89,9 +94,8 @@ namespace PTManagementSystem.Controllers
             // Converts the single ID passed to the function into an array of type integer so we can re-use the function already built in workoutDAO. 
             // Creates a new int list and adds the parameter ID to it, then passes it to the DAO function.
             List<int> WorkoutExerciseIdArr = new List<int> { WorkoutExerciseId };
-            WorkoutDAO sets = new WorkoutDAO();
 
-            int result = await sets.AddSetToDatabase(WorkoutExerciseIdArr);
+            int result = await WorkoutDAO.AddSetToDatabase(WorkoutExerciseIdArr);
 
 
             return Json(result);
@@ -104,9 +108,8 @@ namespace PTManagementSystem.Controllers
             // Creates a new int list and adds the parameter ID to it, then passes it to the DAO function.
             List<int> SetIdsArr = new List<int> { SetIds };
             //WorkoutDAO sets = new WorkoutDAO();
-            WorkoutDAO workoutDAO = new WorkoutDAO();
 
-            int result = await workoutDAO.RemoveSetsFromDatabase(SetIdsArr);
+            int result = await WorkoutDAO.RemoveSetsFromDatabase(SetIdsArr);
 
             return Json(result);
         }
@@ -114,8 +117,7 @@ namespace PTManagementSystem.Controllers
 
         public IActionResult SubmitExercises(int UserId)
         {
-            WorkoutDAO workout = new WorkoutDAO();
-            List<WorkoutExercisesModel> activeWorkout = workout.GetUsersActiveWorkout(UserId);
+            List<WorkoutExercisesModel> activeWorkout = WorkoutDAO.GetUsersActiveWorkout(UserId);
 
             string resultSerialized = JsonSerializer.Serialize(activeWorkout);
 
@@ -128,9 +130,8 @@ namespace PTManagementSystem.Controllers
         // API endpoint for when the user clicks to submit/finish a workout
         public async Task<IActionResult> SubmitWorkout(int UserId, [FromBody] JsonElement WorkoutData)
         {
-            WorkoutDAO workout = new WorkoutDAO();
 
-            int result = await workout.FinishUsersActiveWorkout(WorkoutData);
+            int result = await WorkoutDAO.FinishUsersActiveWorkout(WorkoutData);
 
             // If the submitted object has no sets completed, return a message to the user stating such and exit early.
             if (result == 0)
@@ -149,39 +150,23 @@ namespace PTManagementSystem.Controllers
         //Passes in the UserId within the query to also display any custom exercises created by that user in the db
         public IActionResult ViewExerciseList()
         {
-            WorkoutDAO result = new WorkoutDAO();
-            List<ExerciseModel> exerciseList = result.GetAllExercisesByUserId();
+            List<ExerciseModel> exerciseList = WorkoutDAO.GetAllExercisesByUserId();
 
             string resultSerialized = JsonSerializer.Serialize(exerciseList);
 
-            System.Diagnostics.Debug.WriteLine(result);
+
             return Json(resultSerialized);
-            //return View("CreateWorkout", exerciseList);
         }   
         
 
         public IActionResult CheckForActiveWorkout(int UserId)
         {
-            WorkoutDAO result = new WorkoutDAO();
-            List<WorkoutModel> checkIfActiveWorkout = result.CheckActiveWorkoutByUserId(UserId);
+            List<WorkoutModel> checkIfActiveWorkout = WorkoutDAO.CheckActiveWorkoutByUserId(UserId);
 
-            //string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
-            System.Diagnostics.Debug.WriteLine(checkIfActiveWorkout);
-
-            //if (checkIfActiveWorkout != null)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("If statement has run");
-
-            //    List<WorkoutExercisesModel> viewActiveWorkout = result.ViewActiveWorkoutByUserId(UserId);
-            //    string HasActiveWorkoutSerialized = JsonSerializer.Serialize(viewActiveWorkout);
-
-            //    return Json(HasActiveWorkoutSerialized);
-            //}
-            System.Diagnostics.Debug.WriteLine(result);
             string resultSerialized = JsonSerializer.Serialize(checkIfActiveWorkout);
 
+
             return Json(resultSerialized);
-            //return View("CreateWorkout", exerciseList);
         }
 
         //public IActionResult RemoveExerciseFromActiveWorkout(int WorkoutExerciseId)
