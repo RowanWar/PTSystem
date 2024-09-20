@@ -11,10 +11,9 @@ using System.Configuration;
 
 namespace PTManagementSystem.Services
 {
-    //This was nto commmented out
+
     public class WorkoutDAO /*: IWorkoutDataService*/ 
     {
-        //string _dbConnectionString = @"Host=localhost;Username=postgres;Password=BeBetter30;Database=ptsystem;Pooling=true;Minimum Pool Size=1;Maximum Pool Size=20;";
         private readonly string _dbConnectionString;
 
         public WorkoutDAO(string dbConnectionString)
@@ -22,14 +21,6 @@ namespace PTManagementSystem.Services
             _dbConnectionString = dbConnectionString;
 
         }
-        //string dataSource = NpgsqlDataSource.Create(_dbConnectionString);
-
-        //public class MovieSettings
-        //{
-        //    var moviesConfig =
-        //        Configuration.GetSection("ConnectionString").Get<ConnectionSetting>();
-        //    _connectionString = moviesConfig.PtSystemDb;
-        //}
 
 
         public List<WorkoutModel> GetAllWorkouts()
