@@ -1,4 +1,5 @@
 //using AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using PTManagementSystem.Data;
 using PTManagementSystem.Services;
 using System.Diagnostics;
 using System.Runtime.Intrinsics.Arm;
+using System.Security.Claims;
 
 //<FrameworkReference Include = "Microsoft.AspNetCore.App" />;
 
@@ -22,55 +24,61 @@ var connectionString = builder.Configuration["ConnectionStrings:PtSystemDb"];
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
 builder.Services.AddSingleton<WorkoutDAO>(provider => new WorkoutDAO(connectionString));
-//builder.Services.AddScoped<WorkoutDAO>(provider => new WorkoutDAO(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-//builder.Services.AddScoped<WorkoutDAO>();
 
-builder.Services.AddDataProtection();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<AuthService>();
+
+// Working on
+
+builder.Services.AddAuthentication("cookie")
+    .AddCookie("cookie");
+
+//
+
 
 var app = builder.Build();
 
+app.UseAuthentication();
 
-app.Use((ctx, next) =>
-{
-    // Checks if user authorization cookie exists, if so gets it as an object
-    if (ctx.Request.Cookies.TryGetValue("auth", out var authCookie))
-    {
-        var idp = ctx.RequestServices.GetRequiredService<IDataProtectionProvider>();
-        var protector = idp.CreateProtector("auth-cookie");
+//app.Use((ctx, next) =>
+//{
+//    // Checks if user authorization cookie exists, if so gets it as an object
+//    if (ctx.Request.Cookies.TryGetValue("auth", out var authCookie))
+//    {
+//        var idp = ctx.RequestServices.GetRequiredService<IDataProtectionProvider>();
+//        var protector = idp.CreateProtector("auth-cookie");
 
 
-        // Splits the encrypted cookie on the auth*=*usr:username_value
-        var protectedPayload = authCookie.Split("=").Last();
-        var payload = protector.Unprotect(protectedPayload);
+//        // Splits the encrypted cookie on the auth*=*usr:username_value
+//        var protectedPayload = authCookie.Split("=").Last();
+//        var payload = protector.Unprotect(protectedPayload);
 
-        // Splits the string into two based on "usr*:*username"
-        var parts = payload.Split(":");
+//        // Splits the string into two based on "usr*:*username"
+//        var parts = payload.Split(":");
 
-        var key = parts[0];
-        var value = parts[1];
+//        var key = parts[0];
+//        var value = parts[1];
 
-        var claims = new List<Claim>();
-        claims.Add(new Claim(key, value));
-        var_identity = new ClaimsIdentity(claims);
-        ctx.User = new ClaimsIdentity;
+        
 
-        return next();
-    }
-    else
-    {
-        throw new ArgumentException("ERROR: No cookie has been established for this user!");
-    }
-});
+//        var claims = new List<Claim>();
+//        claims.Add(new Claim(key, value));
+
+//        var identity = new ClaimsIdentity(claims);
+//        ctx.User = new ClaimsPrincipal(identity);
+//        return next();
+//    }
+//    else
+//    {
+//        throw new ArgumentException("ERROR: No cookie has been established for this user!");
+//    }
+//});
 
 
 app.MapGet("/username", (HttpContext ctx) =>
@@ -80,9 +88,16 @@ app.MapGet("/username", (HttpContext ctx) =>
 );
 
 
-app.MapGet("/login", (AuthService auth) =>
+app.MapGet("/login", async (HttpContext ctx) =>
 {
-    auth.SignIn();
+    //auth.SignIn();
+
+    var claims = new List<Claim>();
+    claims.Add(new Claim("usr", "rowan"));
+
+    var identity = new ClaimsIdentity(claims, "cookie");
+    var User = new ClaimsPrincipal(identity);
+    await ctx.SignInAsync("cookie", new ClaimsPrincipal());
     return "ok";
 });
 
@@ -103,7 +118,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
