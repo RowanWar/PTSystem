@@ -7,8 +7,6 @@ namespace ptmanagementsystem.services
 {
     public class SecurityDAO
     {
-        //string sqlStatement = "select * from users WHERE username = @username AND password = @password";     
-
 
         public static bool FindUserByNameAndPassword(UserLogin user)
         {

@@ -12,7 +12,7 @@ namespace PTManagementSystem.Models
         public string Password { get; set; }
     }
 
-    public class UserModel
+    public class User
     {
         [Key]
         public int UserId { get; set; }
@@ -20,6 +20,8 @@ namespace PTManagementSystem.Models
         public string Username { get; set; }
 
         public string UserEmail { get; set; }
+
+        public bool EmailVerified { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
